@@ -26,7 +26,7 @@ export default function Login() {
       //console.log("Respuesta API:", data);
 
       if (data.success) {
-        alert(`✅ ${data.message}`);
+        //alert(`✅ ${data.message}`);
         localStorage.setItem("isLogged", "true");
         localStorage.setItem("id_usuario", data.id_usuario); // Guardamos el ID si lo necesitas
         navigate("/sitedinamic");
