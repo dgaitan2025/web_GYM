@@ -1,0 +1,226 @@
+/* ============================= */
+/* NAVBAR GENERAL */
+/* ============================= */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.home {
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.6); /* 🔵 Azul con transparencia */
+  backdrop-filter: blur(5px);        /* ✅ efecto vidrio/desenfoque */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* sombra suave */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  z-index: 100;
+    /* ✅ Esquinas curvas arriba */
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+/* ============================= */
+/* LOGO */
+/* ============================= */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* espacio entre imagen y texto */
+}
+
+.logo-img {
+  width: 80px;  /* ajusta el tamaño */
+  height: 80px;
+  border-radius: 50%; /* ✅ Si quieres que se vea circular */
+  object-fit: cover;
+}
+
+.logo-img:focus {
+  outline: 2px solid rgba(14, 13, 13, 0.3); /* destello suave blanco */
+  border-radius: 50%;
+}
+
+/* ============================= */
+/* menu */
+/* ============================= */
+
+.menu {
+  display: flex;
+  gap: 2rem; /* ✅ separación automática entre links */
+}
+
+.menu a {
+  position: relative;
+  color: #dcdcdc;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #b8b6b6;
+  transition: width 0.3s ease;
+}
+
+.menu a:hover {
+  color: #fff;
+}
+
+.menu a:hover::after {
+  width: 100%;
+}
+
+/* ============================= */
+/* BOTON */
+/* ============================= */
+.login-btn {
+  background: rgba(24, 26, 28, 0.6); /* 🔵 Azul sobrio y elegante */
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+   margin-right: 2rem; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* sombra suave */
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-btn:hover {
+ background: #222323; /* 🔵 Azul un poco más oscuro al pasar el mouse */
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================= */
+/* HAMBURGUESA (SOLO MOVIL) */
+/* ============================= */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: 2rem; 
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 10px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* ============================= */
+/* RESPONSIVO NAVBAR */
+/* ============================= */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .menu {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    background: #0d1b2a;
+    flex-direction: column;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .menu.open {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .menu a,
+  .menu .login-btn {
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ============================= */
+/* BANNER */
+/* ============================= */
+.banner {
+  width: 100vw; /* 100% del viewport */
+  height: 300px;
+  margin-top: 70px; /* espacio por la navbar */
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  border-bottom: 5px solid #464645;
+  box-shadow: 0 4px 10px rgba(64, 63, 63, 0.3);
+}
+
+.slides img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  opacity: 0;
+  animation: fade 15s infinite;
+}
+
+@keyframes fade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  30% { opacity: 1; }
+  40% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.slides img:nth-child(1) { animation-delay: 0s; }
+.slides img:nth-child(2) { animation-delay: 5s; }
+.slides img:nth-child(3) { animation-delay: 10s; }
+
+
+/* ============================= */
+/* SECCIONES */
+/* ============================= */
+section {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
