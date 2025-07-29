@@ -90,12 +90,6 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="register">
-          ¿No tienes una cuenta?{" "}
-          <a href="/register" className="link-register">
-            Regístrate
-          </a>
-        </p>
       </div>
     </div>
   );
