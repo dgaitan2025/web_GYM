@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./FormRegUsuario.css";
-import "./SiteDinamic";
+import "../Front/SiteDinamic";
 
 function Formulario({ onClose }) {
   const [formData, setFormData] = useState({
