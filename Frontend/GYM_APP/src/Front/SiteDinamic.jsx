@@ -1,108 +1,88 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ IMPORTANTE
+import React, { useState, useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import "./SiteDinamic.css";
-import FormRegUsuario from "../Formularios/FormRegUsuario";
-
-
-const usersData = [
-  { id: "03", name: "Juan Perez", dpi: "#123-456ABC", status: "Vigente", expiration: "2025", attendance: "14/05/2025" },
-  { id: "03", name: "Maria Lopez", dpi: "#123-456ABC", status: "Vencida", expiration: "2025", attendance: "14/05/2025" },
-  { id: "03", name: "Ricardo Mendez", dpi: "#123-456ABC", status: "Vigente", expiration: "2025", attendance: "14/05/2025" },
-];
-
-
 
 export default function SiteDinamic() {
-  const [showForm, setShowForm] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
 
-  const handleLogout = () => {
-    localStorage.removeItem("isLogged"); // Elimina el estado de login
-    navigate("/"); // Redirige al login
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) setMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleNavigation = (route) => {
+    navigate(route);
+    setMenuOpen(false); // cerrar el menú
   };
 
-  
+  const handleLogout = () => {
+    localStorage.removeItem("isLogged");
+    navigate("/");
+  };
 
   return (
     <div className="container">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="logo">🏋️‍♂️ GYM</div>
-        <nav>
-          <button className="active">Registrar Usuario</button>
-          <button>Renovar Membresía</button>
-          <button>Reportes</button>
-          <button>Usuarios</button>
-          <button>Settings</button>
-        </nav>
-        <div className="sidebar-footer">
-          <button className="logout" onClick={handleLogout}>
-          Cerrar Sesión
-        </button>
-        </div>
-      </aside>
+      {/* Navbar para móviles */}
+      {isMobile && (
+        <header className="navbar-dynamic">
+          <div className="logo">
+            <img src="/logo.png" alt="Logo GYM" className="logo-login" />
+          </div>
 
-      {/* Main Content */}
-      <main className="main">
-        <header className="header">
-          <h1>Usuarios</h1>
-          <button className="add-user" onClick={() => setShowForm(true)} > 
-            Añadir Usuario 
-            </button>
-            {/* ✅ Mostramos el formulario como modal */}
-            {showForm && <FormRegUsuario onClose={() => setShowForm(false)} />}
+          <div
+            className={`hamburger ${menuOpen ? "active" : ""}`}
+            onClick={toggleMenu}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <nav className={`menu-dynamic ${menuOpen ? "open" : ""}`}>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Dashboard</button>
+            <button onClick={() => handleNavigation("/sitedinamic/VistaUsuarios")}>Registrar Usuarios</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Registrar Empleados</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Renovar Membresía</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Reportes</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Usuarios</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Settings</button>
+            <button className="logout" onClick={handleLogout}>Cerrar Sesión</button>
+          </nav>
         </header>
+      )}
 
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+      {/* Sidebar para escritorio */}
+      {!isMobile && (
+        <aside className="sidebar">
+          <div className="logo">
+            <img src="/logo.png" alt="Logo GYM" className="logo-login" />
+          </div>
+          <nav>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Dashboard</button>
+            <button onClick={() => handleNavigation("/sitedinamic/VistaUsuarios")}>Registrar Usuarios</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Registrar Empleados</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Renovar Membresía</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Reportes</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Usuarios</button>
+            <button onClick={() => handleNavigation("/sitedinamic/EnConstruccion")}>Settings</button>
+          </nav>
+          <div className="sidebar-footer">
+            <button className="logout" onClick={handleLogout}>Cerrar Sesión</button>
+          </div>
+        </aside>
+      )}
 
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Usuario</th>
-                <th>Nombre</th>
-                <th>DPI</th>
-                <th>Estado Membresía</th>
-                <th>Vencimiento</th>
-                <th>Asistencia</th>
-                <th>Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usersData
-                .filter((u) => u.name.toLowerCase().includes(search.toLowerCase()))
-                .map((user, idx) => (
-                  <tr key={idx}>
-                    <td>{user.id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.dpi}</td>
-                    <td className={user.status === "Vigente" ? "status-vigente" : "status-vencida"}>
-                      {user.status}
-                    </td>
-                    <td>{user.expiration}</td>
-                    <td>{user.attendance}</td>
-                    <td>
-                      <button className="edit">Editar</button>
-                      {user.status === "Vencida" ? (
-                        <button className="renew">Renovar</button>
-                      ) : (
-                        <button className="delete">Eliminar</button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      </main>
+      <section style={{ flex: 1 }}>
+        <Outlet />
+      </section>
     </div>
   );
 }

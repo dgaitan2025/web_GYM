@@ -1,0 +1,30 @@
+.construccion-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.construccion-content {
+  max-width: 600px;
+  width: 100%;
+}
+
+.construccion-img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .construccion-img {
+    max-width: 80%;
+  }
+
+  .construccion-container {
+    padding: 10px;
+  }
+}

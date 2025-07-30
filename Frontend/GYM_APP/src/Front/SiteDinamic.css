@@ -25,9 +25,14 @@
 
 .logo {
   text-align: center;
-  font-size: 20px;
-  font-weight: bold;
   margin-bottom: 20px;
+}
+
+.logo-login {
+  width: 100px; /* Aumenta el tamaño según lo que necesites */
+  height: auto;
+  display: block;
+  margin: 0 auto; /* Centra horizontalmente */
 }
 
 .sidebar nav {
@@ -72,146 +77,96 @@
   background: #2c4068;
 }
 
-/* --- MAIN CONTENT --- */
-.main {
-  flex: 1;
-  padding: 20px;
+/* HAMBURGUESA */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  margin-right: 1rem;
 }
 
-.header {
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* NAVBAR MÓVIL */
+.navbar-dynamic {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 70px;
+  width: 100%;
+  background: #0c1b33;
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 0 1rem;
+  z-index: 1000;
 }
 
-.header h1 {
-  font-size: 24px;
-  color: #333;
-}
-
-.add-user {
-  background: #6a1b9a;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.add-user:hover {
-  background: #4a148c;
-}
-
-/* --- SEARCH BOX --- */
-.search-box {
-  margin-bottom: 20px;
-}
-
-.search-box input {
+.menu-dynamic {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  background: #0c1b33;
   width: 100%;
-  max-width: 300px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  max-height: 0;
+  overflow: hidden;
+  flex-direction: column;
+  transition: max-height 0.3s ease;
+  z-index: 999;
 }
 
-/* --- TABLE --- */
-.table-container {
-  overflow-x: auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+.menu-dynamic.open {
+  display: flex;
+  max-height: 500px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead {
-  background: #e5e7eb;
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-tr:hover {
-  background: #f9fafb;
-}
-
-.status-vigente {
-  color: green;
-  font-weight: bold;
-}
-
-.status-vencida {
-  color: red;
-  font-weight: bold;
-}
-
-.edit, .renew, .delete {
+.menu-dynamic button {
+  padding: 1rem;
   background: none;
   border: none;
-  cursor: pointer;
-  margin-right: 8px;
+  color: white;
+  text-align: left;
+  width: 100%;
+  transition: background 0.3s ease;
 }
 
-.edit {
-  color: #1976d2;
+.menu-dynamic button:hover {
+  background: #1f2e4d;
 }
 
-.renew {
-  color: green;
-}
-
-.delete {
-  color: red;
-}
-
-.edit:hover,
-.renew:hover,
-.delete:hover {
-  text-decoration: underline;
-}
-
-/* --- RESPONSIVE --- */
+/* RESPONSIVO */
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
+  .hamburger {
+    display: flex;
   }
 
   .sidebar {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 10px;
-  }
-
-  .sidebar nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-
-  .sidebar-footer {
     display: none;
   }
 
-  .main {
-    padding: 10px;
+  .logo-login {
+    width: 60px;
   }
 
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .add-user {
-    width: 100%;
+  .container {
+    margin-top: 70px; /* espacio por la barra */
   }
 }
