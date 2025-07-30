@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ IMPORTANTE
 import "./SiteDinamic.css";
-import FormRegUsuario from "./FormRegUsuario";
+import FormRegUsuario from "../Formularios/FormRegUsuario";
 
 
 const usersData = [
