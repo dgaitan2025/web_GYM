@@ -25,7 +25,13 @@ export default function Home() {
         {/* NAVBAR */}
         <header className="navbar">
           <div className="logo">
-            <img src="fit.jpg" alt="Logo GYM" className="logo-img" />
+            <img src="/fit.jpg" alt="Logo GYM" className="logo-img"
+              onClick={() => window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+              })}
+
+              style={{ cursor: "pointer" }} />
           </div>
 
           <div
@@ -51,34 +57,42 @@ export default function Home() {
               Contacto
             </a>
             {/* ✅ Botón que redirige a /login */}
-        <button
-        className="login-btn"
-        onClick={() => navigate("/login")}
-      >
-        Login
-      </button>
+            <button
+              className="login-btn"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
           </nav>
         </header>
 
         {/* SECCIONES */}
         <section id="servicios">
           <h2>Servicios</h2>
-          <p>Aquí irá la descripción de los servicios.</p>
+          <p>Área de pesas libres y máquinas de fuerza.<br></br>
+            Zona de cardio (cintas, elípticas, bicicletas, escaladoras)<br></br>
+            Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.)<br></br>
+            Vestuarios y duchas<br></br>
+            Locker o casilleros de segurida</p>
         </section>
 
         <section id="horarios">
           <h2>Horarios</h2>
-          <p>Aquí irán los horarios.</p>
+          <p>Lunes a Viernes: 5:00 a.m. – 10:00 p.m.<br></br>
+            Sábado: 6:00 a.m. – 21:00 p.m.<br></br>
+            Domingo: 6:00 a.m. – 21:00 p.m.</p>
         </section>
 
         <section id="ubicacion">
           <h2>Ubicación</h2>
-          <p>Dirección del gimnasio.</p>
+          <p>Colonia las brisas, zona 6 Mixco, Guatemala</p>
         </section>
 
         <section id="Contacto">
           <h2>Contacto</h2>
-          <p>Texto Contacto</p>
+          <p>Telefono: 2484 - 6583 <br></br>
+            Correo: maljoss69@gmail.com
+          </p>
         </section>
       </div>
     </>

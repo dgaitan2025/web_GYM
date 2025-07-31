@@ -6,18 +6,22 @@ body {
   padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
+
 }
+
+
 
 .home {
   margin: 0;
   padding: 0;
+
 }
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px;
+  height: 95px;
   background: rgba(0, 0, 0, 0.6); /* 🔵 Azul con transparencia */
   backdrop-filter: blur(5px);        /* ✅ efecto vidrio/desenfoque */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* sombra suave */
@@ -36,12 +40,14 @@ body {
 /* ============================= */
 
 .logo {
+  
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* espacio entre imagen y texto */
+  gap: 1.5rem; /* espacio entre imagen y texto */
 }
 
 .logo-img {
+  
   width: 80px;  /* ajusta el tamaño */
   height: 80px;
   border-radius: 50%; /* ✅ Si quieres que se vea circular */
@@ -179,7 +185,7 @@ body {
 /* ============================= */
 .banner {
   width: 100vw; /* 100% del viewport */
-  height: 300px;
+  height: 500px;
   margin-top: 70px; /* espacio por la navbar */
   overflow: hidden;
   position: relative;
@@ -216,11 +222,56 @@ body {
 /* SECCIONES */
 /* ============================= */
 section {
-  padding: 3rem 2rem;
+  scroll-margin-top: 100px;
+  padding: 10rem 1rem;
   text-align: center;
+  margin: 2rem auto;
+  max-width: 100%;
+  background: #ffffffcc; /* blanco con ligera transparencia */
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 section h2 {
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: #222;
   margin-bottom: 1rem;
+  position: relative;
+}
+
+section h2::after {
+  content: "";
+  width: 60px;
+  height: 3px;
+  background-color: #222;
+  display: block;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+section p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 1rem;
+}
+
+section ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+section ul li {
+  padding: 0.5rem 0;
+  color: #444;
+  font-size: 1rem;
 }
