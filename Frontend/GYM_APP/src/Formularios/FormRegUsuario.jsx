@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./App.css";
 import "../Front/SiteDinamic";
 import axios from "axios";
+import "./FormRegUsuario.css";
 
-
-function Formulario({ cerrarModal }) {
+function Formulario({ onClose }) {
   const initialFormData = {
     nombre: "",
     apellido: "",
@@ -16,21 +15,24 @@ function Formulario({ cerrarModal }) {
     membresiaId: ""
   };
 
-
-
-
   const [formData, setFormData] = useState(initialFormData);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [errors, setErrors] = useState({});
+  const [membresias, setMembresias] = useState([]);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    axios
+      .get("https://Compiladores2025.somee.com/api/Clientes/listarmembresias")
+      .then((response) => setMembresias(response.data))
+      .catch((error) => console.error("Error al obtener membresías:", error));
+
     return () => {
       if (videoRef.current?.srcObject) {
-        videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       }
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -38,70 +40,64 @@ function Formulario({ cerrarModal }) {
     };
   }, [previewUrl]);
 
-const handleChange = (e) => {
-  const { name, value, type, files } = e.target;
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+    const newErrors = { ...errors };
 
-  const newErrors = { ...errors }; 
+    if (name === "nombre" || name === "apellido") {
+      const soloLetras = value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
+      setFormData({ ...formData, [name]: soloLetras });
 
-  if (name === "nombre" || name === "apellido") {
-    const soloLetras = value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
-    setFormData({ ...formData, [name]: soloLetras });
+      if (value !== soloLetras) {
+        newErrors[name] = "Solo se permiten letras en este campo";
+      } else {
+        delete newErrors[name];
+      }
 
-    if (value !== soloLetras) {
-      newErrors[name] = "Solo se permiten letras en este campo";
+      setErrors(newErrors);
+      return;
+    }
+
+    if (name === "telefono") {
+      const soloNumeros = value.replace(/\D/g, "").slice(0, 8);
+      setFormData({ ...formData, [name]: soloNumeros });
+
+      if (value !== soloNumeros) {
+        newErrors.telefono = "Solo se permiten números (máximo 8 dígitos)";
+      } else {
+        delete newErrors.telefono;
+      }
+
+      setErrors(newErrors);
+      return;
+    }
+
+    if (name === "dpi") {
+      const soloNumeros = value.replace(/\D/g, "").slice(0, 13);
+      setFormData({ ...formData, [name]: soloNumeros });
+
+      if (value !== soloNumeros) {
+        newErrors.dpi = "Solo se permiten números (máximo 13 dígitos)";
+      } else {
+        delete newErrors.dpi;
+      }
+
+      setErrors(newErrors);
+      return;
+    }
+
+    if (type === "file") {
+      const file = files[0];
+      setFormData({ ...formData, [name]: file });
+
+      if (file) {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      }
     } else {
-      delete newErrors[name]; 
+      setFormData({ ...formData, [name]: value });
     }
-
-    setErrors(newErrors);
-    return;
-  }
-
-  if (name === "telefono") {
-    const soloNumeros = value.replace(/\D/g, "").slice(0, 8);
-    setFormData({ ...formData, [name]: soloNumeros });
-
-    if (value !== soloNumeros) {
-      newErrors.telefono = "Solo se permiten números (máximo 8 dígitos)";
-    } else {
-      delete newErrors.telefono;
-    }
-
-    setErrors(newErrors);
-    return;
-  }
-
-  if (name === "dpi") {
-    const soloNumeros = value.replace(/\D/g, "").slice(0, 13);
-    setFormData({ ...formData, [name]: soloNumeros });
-
-    if (value !== soloNumeros) {
-      newErrors.dpi = "Solo se permiten números (máximo 13 dígitos)";
-    } else {
-      delete newErrors.dpi;
-    }
-
-    setErrors(newErrors);
-    return;
-  }
-
-
-
-
-
-  if (type === "file") {
-    const file = files[0];
-    setFormData({ ...formData, [name]: file });
-
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-    }
-  } else {
-    setFormData({ ...formData, [name]: value });
-  }
-};
-
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -125,16 +121,11 @@ const handleChange = (e) => {
       newErrors.telefono = "Debe contener exactamente 8 dígitos numéricos";
     }
 
-
     if (!formData.dpi.trim()) {
       newErrors.dpi = "El DPI es obligatorio";
-    } else if (!/^\d{13}$/.test(formData.pdi)) {
+    } else if (!/^\d{13}$/.test(formData.dpi)) {
       newErrors.dpi = "Debe contener exactamente 13 dígitos numéricos";
     }
-
-
-
-
 
     if (!formData.fechaNacimiento) {
       newErrors.fechaNacimiento = "La fecha es obligatoria";
@@ -187,7 +178,7 @@ const handleChange = (e) => {
 
     setFormData(initialFormData);
     setPreviewUrl(null);
-    cerrarModal();
+    onClose();
   };
 
   const abrirCamara = async () => {
@@ -228,114 +219,83 @@ const handleChange = (e) => {
     }
   };
 
-// Consulta de formulario
-const [membresias, setMembresias] = useState([]);
-
-
-    useEffect(() => {
-    axios
-      .get("https://Compiladores2025.somee.com/api/Clientes/listarmembresias")
-      .then((response) => {
-        setMembresias(response.data);
-      })
-      .catch((error) => {
-        console.error("Error al obtener membresías:", error);
-      });
-  }, []);
-
-  
-
   return (
-    <form className="formulario" onSubmit={handleSubmit}>
-      <h2>Registro de Clientes</h2>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <form className="formulario" onSubmit={handleSubmit}>
+          <h2>Registro de Clientes</h2>
+          <button type="button" className="cerrar-modal" onClick={onClose}>✕</button>
 
-      <button type="button" className="cerrar-modal" onClick={cerrarModal}>✕</button>
+          <div><label>Nombre:</label>
+            <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
+            {errors.nombre && <p className="error">{errors.nombre}</p>}
+          </div>
 
-      <div>
-        <label>Nombre:</label>
-        <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
-        {errors.nombre && <p className="error">{errors.nombre}</p>}
-      </div>
+          <div><label>Apellido:</label>
+            <input type="text" name="apellido" value={formData.apellido} onChange={handleChange} required />
+            {errors.apellido && <p className="error">{errors.apellido}</p>}
+          </div>
 
-      <div>
-        <label>Apellido:</label>
-        <input type="text" name="apellido" value={formData.apellido} onChange={handleChange} required />
-        {errors.apellido && <p className="error">{errors.apellido}</p>}
-      </div>
+          <div><label>Teléfono:</label>
+            <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} required />
+            {errors.telefono && <p className="error">{errors.telefono}</p>}
+          </div>
 
-      <div>
-        <label>Teléfono:</label>
-        <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} required />
-        {errors.telefono && <p className="error">{errors.telefono}</p>}
-      </div>
+          <div><label>DPI:</label>
+            <input type="text" name="dpi" value={formData.dpi} onChange={handleChange} required />
+            {errors.dpi && <p className="error">{errors.dpi}</p>}
+          </div>
 
+          <div><label>Fecha de Nacimiento:</label>
+            <input type="date" name="fechaNacimiento" value={formData.fechaNacimiento} onChange={handleChange} required />
+            {errors.fechaNacimiento && <p className="error">{errors.fechaNacimiento}</p>}
+          </div>
 
+          <div><label>Correo:</label>
+            <input type="email" name="correo" value={formData.correo} onChange={handleChange} required />
+            {errors.correo && <p className="error">{errors.correo}</p>}
+          </div>
 
-      <div>
-        <label>DPI:</label>
-        <input type="dpin" name="dpi" value={formData.dpi} onChange={handleChange} required />
-        {errors.dpi && <p className="error">{errors.dpi}</p>}
-      </div>
+          <div><label>Membresía:</label>
+            <select name="membresiaId" value={formData.membresiaId} onChange={handleChange} required>
+              <option value="">Seleccione una opción</option>
+              {membresias.map((m) => (
+                <option key={m.IdMembresia} value={m.IdMembresia}>
+                  {m.Descripcion}
+                </option>
+              ))}
+            </select>
+            {errors.membresiaId && <p className="error">{errors.membresiaId}</p>}
+          </div>
 
+          <div><label>Foto:</label>
+            <button type="button" className="boton-camara" onClick={abrirCamara}>Usar Cámara</button>
+          </div>
 
-      <div>
-        <label>Fecha de Nacimiento:</label>
-        <input type="date" name="fechaNacimiento" value={formData.fechaNacimiento} onChange={handleChange} required />
-        {errors.fechaNacimiento && <p className="error">{errors.fechaNacimiento}</p>}
-      </div>
+          {previewUrl && (
+            <div className="preview-container">
+              <p>Vista previa de la foto:</p>
+              <img src={previewUrl} alt="Vista previa" className="preview-img" />
+            </div>
+          )}
 
-      <div>
-        <label>Correo:</label>
-        <input type="email" name="correo" value={formData.correo} onChange={handleChange} required />
-        {errors.correo && <p className="error">{errors.correo}</p>}
-      </div>
+          <button type="submit" className="boton-registrar">Registrar Cliente</button>
+        </form>
 
-      <div>
-  <label>Membresía:</label>
-  <select
-  name="membresiaId"
-  value={formData.membresiaId}
-  onChange={handleChange}
-  required
->
-  <option value="">Seleccione una opción</option>
-  {membresias.map((m) => (
-    <option key={m.IdMembresia} value={m.IdMembresia}>
-      {m.Descripcion}
-    </option>
-  ))}
-</select>
-{errors.membresiaId && <p className="error">{errors.membresiaId}</p>}
-</div>
-
-
-      <div>
-        <label>Foto:</label>
-        <button type="button" className="boton-camara" onClick={abrirCamara}>Usar Cámara</button>
-      </div>
-
-      {previewUrl && (
-        <div className="preview-container">
-          <p>Vista previa de la foto:</p>
-          <img src={previewUrl} alt="Vista previa" className="preview-img" />
-        </div>
-      )}
-
-      <button type="submit" className="boton-registrar">Registrar Cliente</button>
-
-      {showCamera && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <video ref={videoRef} autoPlay className="video" />
-            <canvas ref={canvasRef} style={{ display: "none" }} />
-            <div className="modal-buttons">
-              <button type="button" onClick={tomarFoto}>Tomar Foto</button>
-              <button type="button" onClick={cerrarCamara}>Cancelar</button>
+        {showCamera && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <video ref={videoRef} autoPlay className="video" />
+              <canvas ref={canvasRef} style={{ display: "none" }} />
+              <div className="modal-buttons">
+                <button type="button" onClick={tomarFoto}>Tomar Foto</button>
+                <button type="button" onClick={cerrarCamara}>Cancelar</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </form>
+        )}
+      </div>
+    </div>
   );
 }
 
