@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "../Front/SiteDinamic";
+import axios from "axios";
+
 
 function Formulario({ cerrarModal }) {
   const initialFormData = {
@@ -13,6 +15,9 @@ function Formulario({ cerrarModal }) {
     correo: "",
     membresiaId: ""
   };
+
+
+
 
   const [formData, setFormData] = useState(initialFormData);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -223,6 +228,23 @@ const handleChange = (e) => {
     }
   };
 
+// Consulta de formulario
+const [membresias, setMembresias] = useState([]);
+
+
+    useEffect(() => {
+    axios
+      .get("https://Compiladores2025.somee.com/api/Clientes/listarmembresias")
+      .then((response) => {
+        setMembresias(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener membresías:", error);
+      });
+  }, []);
+
+  
+
   return (
     <form className="formulario" onSubmit={handleSubmit}>
       <h2>Registro de Clientes</h2>
@@ -271,17 +293,19 @@ const handleChange = (e) => {
       <div>
   <label>Membresía:</label>
   <select
-    name="membresiaId"
-    value={formData.membresiaId}
-    onChange={handleChange}
-    required
-  >
-    <option value="">Seleccione una opción</option>
-    <option value="BASICA">Básica</option>
-    <option value="PREMIUM">Premium</option>
-    <option value="VIP">VIP</option>
-  </select>
-  {errors.membresiaId && <p className="error">{errors.membresiaId}</p>}
+  name="membresiaId"
+  value={formData.membresiaId}
+  onChange={handleChange}
+  required
+>
+  <option value="">Seleccione una opción</option>
+  {membresias.map((m) => (
+    <option key={m.IdMembresia} value={m.IdMembresia}>
+      {m.Descripcion}
+    </option>
+  ))}
+</select>
+{errors.membresiaId && <p className="error">{errors.membresiaId}</p>}
 </div>
 
 
