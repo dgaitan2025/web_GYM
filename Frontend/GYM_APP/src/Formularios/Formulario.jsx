@@ -1,8 +1,6 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "../Front/SiteDinamic";
-
 
 function Formulario({ cerrarModal }) {
   const initialFormData = {
@@ -69,7 +67,7 @@ const handleChange = (e) => {
   }
 
   if (name === "dpi") {
-    const soloNumeros = value.replace(/\D/g, "").slice(0, 8);
+    const soloNumeros = value.replace(/\D/g, "").slice(0, 13);
     setFormData({ ...formData, [name]: soloNumeros });
 
     if (value !== soloNumeros) {
@@ -253,9 +251,10 @@ const handleChange = (e) => {
 
       <div>
         <label>DPI:</label>
-        <input type="pdin" name="dpi" value={formData.dpi} onChange={handleChange} required />
-        {errors.pdi && <p className="error">{errors.pdi}</p>}
+        <input type="dpin" name="dpi" value={formData.dpi} onChange={handleChange} required />
+        {errors.dpi && <p className="error">{errors.dpi}</p>}
       </div>
+
 
       <div>
         <label>Fecha de Nacimiento:</label>
