@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import "./SiteDinamic.css";
 
+
+
 export default function SiteDinamic() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
