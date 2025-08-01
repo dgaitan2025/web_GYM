@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeSite from "./Front/HomeSite";
 import Login from "./Front/Login";
 import SiteDinamic from "./Front/SiteDinamic";
-import FormRegUsuario from "./Formularios/FormRegUsuario";
+import FormRegUsuario from "./Formularios/FormRegUsuario"; //formulario usuarios
 import PrivateRoute from "./Funciones/PrivateRoute";
 import VistaUsuarios from "./Vistas/VistaUsuarios";
 import VistaEnConstruccion from "./Vistas/VistaEnConstruccion";

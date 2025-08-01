@@ -1,6 +1,6 @@
 import React from "react";
 import Formulario from "./Formulario";
-import "./App.css"; // Asegúrate de tener los estilos aquí
+import "./App.css"; // tener los estilos aquí
 
 function FormRegUsuario() {
   // Esta función cierra el modal volviendo a la página anterior
