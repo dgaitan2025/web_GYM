@@ -15,7 +15,7 @@ body {
   border-radius: 18px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
   position: relative;
-  transition: 0.3s ease all;
+  transition: 0.3s ease all; 
   border: 1px solid #e5e9f2;
 }
 
@@ -118,6 +118,7 @@ body {
 }
 
 .modal-content {
+
    background: #ffffff;
   padding: 2rem;
   border-radius: 16px;
@@ -272,4 +273,8 @@ body {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
   outline: none;
 }
+
+
+
+
 
