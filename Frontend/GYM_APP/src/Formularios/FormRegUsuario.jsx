@@ -140,14 +140,56 @@ function Formulario({ onClose }) {
       }
     }
 
-    const dominiosValidos = ["@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com"];
-    if (!formData.correo.trim()) {
-      newErrors.correo = "El correo es obligatorio";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) {
-      newErrors.correo = "El formato del correo es inválido";
-    } else if (!dominiosValidos.some((dominio) => formData.correo.endsWith(dominio))) {
-      newErrors.correo = "Dominio no permitido. Usa @gmail.com, @hotmail.com, etc.";
-    }
+    const dominiosValidos = [
+  // Correos personales populares
+  "@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@aol.com", "@icloud.com", "@protonmail.com",
+
+  // Universidades de Guatemala
+  "@umg.edu.gt",    // Mariano Gálvez
+  "@usac.edu.gt",   // San Carlos
+  "@uvg.edu.gt",    // Universidad del Valle
+  "@galileo.edu",   // Galileo
+  "@uaglobal.edu.gt",
+  "@uac.edu.gt",    // Universidad de Occidente
+  "@panamericana.edu.gt", // Panamericana
+
+  // Entidades financieras guatemaltecas
+  "@banrural.com.gt",
+  "@bi.com.gt",         // Banco Industrial
+  "@bancoagricola.com.gt",
+  "@baccredomatic.com",
+  "@gytcontinental.com.gt",
+  "@bam.com.gt",        // Banco Agromercantil
+
+  // Empresas y entidades en Guatemala
+  "@intelaf.com",
+  "@cemaco.com",
+  "@prensa.com.gt",
+  "@telgua.com.gt",
+  "@clarogt.com.gt",
+  "@tigo.com.gt",
+  "@agenciasway.com",
+  "@cerveceriacentroamericana.com",
+  "@pollo.campero.com",
+  "@cementosprogreso.com",
+  "@disatel.com.gt",
+  "@grupoalmo.com",
+  "@alimentosmaravilla.com",
+
+  // Dominios corporativos genéricos válidos
+  "@company.com", "@corp.com", "@enterprise.com", "@business.com"
+];
+
+if (!formData.correo.trim()) {
+  newErrors.correo = "El correo es obligatorio";
+} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) {
+  newErrors.correo = "El formato del correo es inválido";
+} else if (!dominiosValidos.some((dominio) => formData.correo.endsWith(dominio))) {
+  newErrors.correo = "Dominio no permitido. Usa un correo valido.";
+}
+
+
+
 
     if (!formData.membresiaId.trim()) {
       newErrors.membresiaId = "El ID de membresía es obligatorio";
