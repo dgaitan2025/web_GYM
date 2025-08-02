@@ -4,54 +4,54 @@ body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   color: #1c1c1c;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Contenedor del formulario */
 .formulario {
+  width: 90%;
   max-width: 480px;
   margin: 0.1rem auto;
-  padding: 1rem;
+  padding: 2.5rem;
   background: #fff;
-  border-radius: 18px;
+  border-radius: 12px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
-  position: relative;
-  transition: 0.3s ease all; 
   border: 1px solid #e5e9f2;
+  transition: 0.3s ease all;
 }
 
-/* Título */
 .formulario h2 {
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: #24324a;
 }
 
-/* Campos */
 .formulario div {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .formulario label {
   display: block;
   margin-bottom: 0.4rem;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.95rem;
   color: #4b5563;
 }
 
-.formulario input {
+.formulario input,
+.formulario select {
   width: 100%;
-  padding: 12px 16px;
-  border: 1.5px solid #cbd5e1;
+  padding: 8px 12px;
+  border: 1.5px solid #9ec4ef;
   border-radius: 12px;
   font-size: 1rem;
   background-color: #f9fafb;
   transition: all 0.2s ease;
 }
 
-.formulario input:focus {
+.formulario input:focus,
+.formulario select:focus {
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
   outline: none;
@@ -62,14 +62,14 @@ body {
 .boton-registrar {
   width: 100%;
   padding: 12px 0;
-  border: none;
   font-size: 1rem;
   font-weight: 600;
   border-radius: 12px;
   cursor: pointer;
   margin-top: 0.8rem;
-  transition: all 0.3s ease;
   color: white;
+  transition: all 0.3s ease;
+  border: none;
 }
 
 .boton-camara {
@@ -97,13 +97,14 @@ body {
 }
 
 .preview-img {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
   border-radius: 12px;
   border: 2px solid #6366f1;
   box-shadow: 0 6px 16px rgba(99, 102, 241, 0.2);
 }
 
-/* Cámara */
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -111,6 +112,7 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 10, 20, 0.75);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,16 +120,16 @@ body {
 }
 
 .modal-content {
-
-   background: #ffffff;
+  background: #ffffff;
   padding: 2rem;
   border-radius: 16px;
   text-align: center;
-  max-width: 500px;
+  max-width: 600px;
   width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   position: relative;
-
 }
 
 .video {
@@ -140,13 +142,12 @@ body {
 .modal-buttons {
   margin-top: 1.5rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 1rem;
 }
 
 .modal-buttons button {
-  flex: 1;
-  padding: 12px 0;
+  padding: 12px;
   border-radius: 10px;
   border: none;
   font-weight: 600;
@@ -173,7 +174,7 @@ body {
   background-color: #dc2626;
 }
 
-/* Botón de cerrar modal */
+/* Botón cerrar */
 .cerrar-modal {
   position: absolute;
   top: 1rem;
@@ -203,40 +204,7 @@ body {
   to   { opacity: 1; }
 }
 
-
-
-
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 10, 20, 0.75);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-/* Contenedor del formulario modal */
-.modal-content {
-  background: #ffffff;
-  
-  padding: 2rem;
-  border-radius: 16px;
-  text-align: center;
-  max-width: 600px;
-  width: 95%;
-  max-height: 100vh;         /* Altura máxima visible */
-  overflow-y: auto;         /* Scroll interno */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  position: relative;
-}
-
-/* scroll bar */
+/* Scrollbar personalizado */
 .modal-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -250,29 +218,38 @@ body {
   background: transparent;
 }
 
-/* dispositivos táctiles */
+/* RESPONSIVE */
 @media (max-width: 600px) {
+  .formulario {
+    padding: 1rem;
+  }
+
+  .formulario h2 {
+    font-size: 1.4rem;
+  }
+
+  .formulario input,
+  .formulario select {
+    font-size: 0.95rem;
+    padding: 10px 14px;
+  }
+
+  .boton-camara,
+  .boton-registrar {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
   .modal-content {
+    padding: 1.2rem;
     max-height: 85vh;
-    padding: 1.5rem;
   }
 }
 
-
-.formulario select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 12px;
-  font-size: 1rem;
-  background-color: #f9fafb;
-  transition: all 0.2s ease;
-}
-.formulario select:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  outline: none;
-}
 
 
 
