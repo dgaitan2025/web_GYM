@@ -258,7 +258,9 @@ function Formulario({ onClose }) {
 
           <div><label>Membresía:</label>
             <select name="membresiaId" value={formData.membresiaId} onChange={handleChange} required>
-              <option value="">Seleccione una opción</option>
+              <option value="" disabled hidden>
+                Seleccione una opción
+              </option>
               {membresias.map((m) => (
                 <option key={m.IdMembresia} value={m.IdMembresia}>
                   {m.Descripcion}
