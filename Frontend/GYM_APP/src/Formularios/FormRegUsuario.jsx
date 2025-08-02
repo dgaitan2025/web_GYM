@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "../Front/SiteDinamic";
 import axios from "axios";
 import "./FormRegUsuario.css";
+import { insertarCliente } from "../Funciones/IntoClienteService";
 
 function Formulario({ onClose }) {
   const initialFormData = {
@@ -10,7 +11,7 @@ function Formulario({ onClose }) {
     telefono: "",
     dpi: "",
     fechaNacimiento: "",
-    foto: null,
+    foto: "",
     correo: "",
     membresiaId: ""
   };
@@ -199,17 +200,48 @@ if (!formData.correo.trim()) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    if (formData.foto) {
+    if (true) {
+      /*
       const fileReader = new FileReader();
       fileReader.onload = () => {
-        alert("Cliente registrado correctamente");
+        alert("Ingreso");
         console.log("Foto (Base64):", fileReader.result);
       };
-      fileReader.readAsDataURL(formData.foto);
+      */
+
+      //parte para insertar usuario en db
+      const cliente = {
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      telefono: formData.telefono,
+      fechaNacimiento: formData.fechaNacimiento,
+      foto: formData.base64, // o base64 si tienes imagen
+      correo: formData.correo,
+      idTipoUsuario: 4,
+      idMembresia: parseInt(formData.membresiaId),
+      idSucursal: 1,
+      numero_Identificacion: formData.dpi
+    };
+    console.log(formData.nombre);
+    console.log(formData.apellido);
+    console.log(formData.telefono);
+    console.log(formData.fechaNacimiento);
+    console.log(formData.foto64);
+    console.log(formData.correo);
+    console.log(formData.membresiaId);
+    
+    const resultado = await insertarCliente(cliente);
+
+    if (resultado.success === 1) {
+    window.alert("✅ Cliente insertado con éxito");
+  } else {
+    window.alert("❌ Ocurrió un error al insertar el cliente");
+  }
+
     } else {
       alert("Cliente registrado correctamente (sin foto)");
     }
@@ -233,25 +265,67 @@ if (!formData.correo.trim()) {
     }
   };
 
-  const tomarFoto = () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+const tomarFoto = async () => {
+  const video = videoRef.current;
+  const canvas = canvasRef.current;
+  const context = canvas.getContext("2d");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  if (!video || !canvas || !context) {
+    console.error("Referencia a video o canvas no válida");
+    return;
+  }
 
-    canvas.toBlob((blob) => {
-      const file = new File([blob], "foto.jpg", { type: "image/jpeg" });
-      setFormData({ ...formData, foto: file });
+  // Captura la imagen del video
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const preview = URL.createObjectURL(blob);
+  // Convierte el canvas en un blob, luego a File y finalmente a base64
+  canvas.toBlob(async (blob) => {
+    if (!blob) {
+      console.error("No se pudo generar el blob");
+      return;
+    }
+
+    const file = new File([blob], "foto.jpg", { type: "image/jpeg" });
+    const preview = URL.createObjectURL(blob);
+
+    try {
+      const base64 = await convertirA64(file);
+
+      // Guarda tanto el File como (opcionalmente) el Base64
+      setFormData(prev => ({
+        ...prev,
+        foto: file,
+        foto64: base64, // opcional si deseas almacenar también el base64
+      }));
+
       setPreviewUrl(preview);
-    }, "image/jpeg");
+
+      //alert("Ingreso");
+      console.log("📸 Foto en Base64:", base64);
+    } catch (err) {
+      console.error("Error al convertir a base64:", err);
+    }
 
     cerrarCamara();
-  };
+  }, "image/jpeg");
+};
+
+// Función auxiliar para convertir File a Base64
+const convertirA64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject("Error al leer archivo");
+
+    reader.readAsDataURL(file);
+  });
+};
+
+
+  
 
   const cerrarCamara = () => {
     setShowCamera(false);
