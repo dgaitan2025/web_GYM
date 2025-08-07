@@ -6,39 +6,52 @@
   font-family: Arial, sans-serif;
 }
 
-.container {
-  display: flex;
-  min-height: 100vh;
-  background: #f3f4f6;
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
+
+
+.container-fluid {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  min-height: 100vh;
+  
+}
+
 
 /* --- SIDEBAR --- */
 .sidebar {
-  width: 240px;
+  width: 200px; /* Antes: 240px */
   background: #0c1b33;
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 0;
+  padding: 30px 0;
 }
 
 .logo {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .logo-login {
-  width: 100px; /* Aumenta el tamaño según lo que necesites */
+  width: 80px; /* Ajustado para visual balance */
   height: auto;
   display: block;
-  margin: 0 auto; /* Centra horizontalmente */
+  margin: 0 auto;
 }
 
 .sidebar nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px; /* Más compacto */
   padding: 0 15px;
 }
 
@@ -47,10 +60,11 @@
   border: none;
   color: #fff;
   text-align: left;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 8px 12px; /* Más pequeño */
+  border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s;
+  font-size: 14px;
 }
 
 .sidebar nav button:hover,
@@ -64,18 +78,29 @@
 
 .logout {
   width: 100%;
-  padding: 10px;
+  padding: 8px 12px;
   background: #1f2e4d;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s;
+  font-size: 14px;
 }
 
 .logout:hover {
   background: #2c4068;
 }
+
+/* --- SECCIÓN PRINCIPAL --- */
+section {
+  flex: 4;
+  padding: 2rem;
+  margin: 0;
+  overflow: auto;
+}
+
+
 
 /* HAMBURGUESA */
 .hamburger {
@@ -166,7 +191,10 @@
     width: 60px;
   }
 
-  .container {
-    margin-top: 70px; /* espacio por la barra */
+  .container-fluid  {
+    margin-top: 70px;
+    flex-direction: column;
   }
+
+
 }

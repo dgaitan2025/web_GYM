@@ -6,6 +6,8 @@ import FormRegUsuario from "./Formularios/FormRegUsuario"; //formulario usuarios
 import PrivateRoute from "./Funciones/PrivateRoute";
 import VistaUsuarios from "./Vistas/VistaUsuarios";
 import VistaEnConstruccion from "./Vistas/VistaEnConstruccion";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
   const usersData = [
