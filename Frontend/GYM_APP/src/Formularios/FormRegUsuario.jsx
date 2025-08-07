@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import "../Front/SiteDinamic";
 import axios from "axios";
 import "./FormRegUsuario.css";
+import { validarDPI } from "validador-dpi-nit";
 import { insertarCliente } from "../Funciones/IntoClienteService";
+import { createPortal } from "react-dom";
 
 function Formulario({ onClose }) {
   const initialFormData = {
@@ -41,6 +43,10 @@ function Formulario({ onClose }) {
     };
   }, [previewUrl]);
 
+
+
+  /* Gestion de los campos */
+  /* implementacion de validaciones */
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     const newErrors = { ...errors };
@@ -73,19 +79,34 @@ function Formulario({ onClose }) {
       return;
     }
 
+
+
     if (name === "dpi") {
-      const soloNumeros = value.replace(/\D/g, "").slice(0, 13);
-      setFormData({ ...formData, [name]: soloNumeros });
+  const limpio = value.replace(/\D/g, "").slice(0, 13); // Solo números, máximo 13 dígitos
+  const newErrors = { ...errors };
+  setFormData({ ...formData, [name]: limpio });
 
-      if (value !== soloNumeros) {
-        newErrors.dpi = "Solo se permiten números (máximo 13 dígitos)";
-      } else {
-        delete newErrors.dpi;
-      }
+  // Validación condicional
+  if (limpio.length < 13) {
+    newErrors.dpi = "El DPI debe tener exactamente 13 dígitos";
+  } else if (!validarDPI(limpio)) {
+    newErrors.dpi = "El DPI no es válido";
+  } else {
+    delete newErrors.dpi;
+  }
 
-      setErrors(newErrors);
-      return;
-    }
+  setErrors(newErrors);
+  return;
+}
+
+
+
+    
+
+  
+
+
+
 
     if (type === "file") {
       const file = files[0];
@@ -122,11 +143,18 @@ function Formulario({ onClose }) {
       newErrors.telefono = "Debe contener exactamente 8 dígitos numéricos";
     }
 
+
     if (!formData.dpi.trim()) {
-      newErrors.dpi = "El DPI es obligatorio";
-    } else if (!/^\d{13}$/.test(formData.dpi)) {
-      newErrors.dpi = "Debe contener exactamente 13 dígitos numéricos";
-    }
+  newErrors.dpi = "El DPI es obligatorio";
+} else if (formData.dpi.length !== 13) {
+  newErrors.dpi = "El DPI debe tener exactamente 13 dígitos";
+} else if (!validarDPI(formData.dpi)) {
+  newErrors.dpi = "El DPI no es válido";
+}
+
+
+
+
 
     if (!formData.fechaNacimiento) {
       newErrors.fechaNacimiento = "La fecha es obligatoria";
@@ -324,9 +352,6 @@ const convertirA64 = (file) => {
   });
 };
 
-
-  
-
   const cerrarCamara = () => {
     setShowCamera(false);
     const stream = videoRef.current?.srcObject;
@@ -335,7 +360,14 @@ const convertirA64 = (file) => {
     }
   };
 
+
+
+
+  /* modales de formulario y camara separados para evitar conflicto */
+  /* uso de createPortal */
   return (
+    <>
+    {createPortal(
     <div className="modal-overlay">
       <div className="modal-content">
         <form className="formulario" onSubmit={handleSubmit}>
@@ -400,7 +432,14 @@ const convertirA64 = (file) => {
           <button type="submit" className="boton-registrar">Registrar Cliente</button>
         </form>
 
-        {showCamera && (
+        </div>
+        </div>,
+        document.body
+    )}
+
+
+        {showCamera && 
+        createPortal(
           <div className="modal-overlay">
             <div className="modal-content">
               <video ref={videoRef} autoPlay className="video" />
@@ -410,10 +449,12 @@ const convertirA64 = (file) => {
                 <button type="button" onClick={cerrarCamara}>Cancelar</button>
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
-      </div>
-    </div>
+      
+    </>
+    
   );
 }
 
