@@ -45,6 +45,22 @@ function Formulario({ onClose }) {
 
 
 
+  // Validación básica de DPI (Guatemala): 13 dígitos, con departamento y municipio válidos
+function validarDPI(dpi) {
+  if (!/^\d{13}$/.test(dpi)) return false;
+
+  const departamento = parseInt(dpi.substring(9, 11), 10);
+  const municipio = parseInt(dpi.substring(11, 13), 10);
+
+  if (departamento === 0 || municipio === 0) return false;
+  if (departamento > 22 || municipio > 20) return false; // rangos válidos
+
+  return true;
+}
+
+
+
+
   /* Gestion de los campos */
   /* implementacion de validaciones */
   const handleChange = (e) => {
@@ -81,15 +97,15 @@ function Formulario({ onClose }) {
 
 
 
-    if (name === "dpi") {
-  const limpio = value.replace(/\D/g, "").slice(0, 13); // Solo números, máximo 13 dígitos
-  const newErrors = { ...errors };
-  setFormData({ ...formData, [name]: limpio });
+if (name === "dpi") {
+  const soloNumeros = value.replace(/\D/g, "").slice(0, 13);
+  setFormData({ ...formData, [name]: soloNumeros });
 
-  // Validación condicional
-  if (limpio.length < 13) {
-    newErrors.dpi = "El DPI debe tener exactamente 13 dígitos";
-  } else if (!validarDPI(limpio)) {
+  if (value !== soloNumeros) {
+    newErrors.dpi = "Solo se permiten números (máximo 13 dígitos)";
+  } else if (soloNumeros.length !== 13) {
+    newErrors.dpi = "El DPI debe contener exactamente 13 dígitos";
+  } else if (!validarDPI(soloNumeros)) {
     newErrors.dpi = "El DPI no es válido";
   } else {
     delete newErrors.dpi;
@@ -100,10 +116,45 @@ function Formulario({ onClose }) {
 }
 
 
+if (name === "correo") {
+  const correoTrim = value.trim();
+  const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const dominiosValidos = [
+    "@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@aol.com", "@icloud.com", "@protonmail.com",
+    "@umg.edu.gt", "@usac.edu.gt", "@uvg.edu.gt", "@galileo.edu", "@uaglobal.edu.gt", "@uac.edu.gt", "@panamericana.edu.gt",
+    "@banrural.com.gt", "@bi.com.gt", "@bancoagricola.com.gt", "@baccredomatic.com", "@gytcontinental.com.gt", "@bam.com.gt",
+    "@intelaf.com", "@cemaco.com", "@prensa.com.gt", "@telgua.com.gt", "@clarogt.com.gt", "@tigo.com.gt",
+    "@agenciasway.com", "@cerveceriacentroamericana.com", "@pollo.campero.com", "@cementosprogreso.com",
+    "@disatel.com.gt", "@grupoalmo.com", "@alimentosmaravilla.com", "@company.com", "@corp.com", "@enterprise.com", "@business.com"
+  ];
 
-    
+  setFormData({ ...formData, correo: correoTrim });
 
-  
+  if (!correoTrim) {
+    newErrors.correo = "El correo es obligatorio";
+  } else if (correoTrim.length < 6 || correoTrim.length > 100) {
+    newErrors.correo = "Debe tener entre 6 y 100 caracteres";
+  } else if (!correoRegex.test(correoTrim)) {
+    newErrors.correo = "Formato de correo inválido";
+  } else {
+    const dominioCorreo = correoTrim.split("@")[1]?.toLowerCase() || "";
+    const dominioValido = dominiosValidos.some((domPermitido) =>
+      dominioCorreo === domPermitido.replace("@", "").toLowerCase() ||
+      dominioCorreo.endsWith("." + domPermitido.replace("@", "").toLowerCase())
+    );
+
+    if (!dominioValido) {
+      newErrors.correo = "Dominio no permitido. Usa un correo válido.";
+    } else {
+      delete newErrors.correo;
+    }
+  }
+
+  setErrors(newErrors);
+  return;
+}
+
+
 
 
 
@@ -146,13 +197,9 @@ function Formulario({ onClose }) {
 
     if (!formData.dpi.trim()) {
   newErrors.dpi = "El DPI es obligatorio";
-} else if (formData.dpi.length !== 13) {
-  newErrors.dpi = "El DPI debe tener exactamente 13 dígitos";
-} else if (!validarDPI(formData.dpi)) {
+} else if (!validarDPI(formData.dpi.trim())) {
   newErrors.dpi = "El DPI no es válido";
 }
-
-
 
 
 
@@ -169,53 +216,33 @@ function Formulario({ onClose }) {
       }
     }
 
-    const dominiosValidos = [
-  // Correos personales populares
-  "@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@aol.com", "@icloud.com", "@protonmail.com",
 
-  // Universidades de Guatemala
-  "@umg.edu.gt",    // Mariano Gálvez
-  "@usac.edu.gt",   // San Carlos
-  "@uvg.edu.gt",    // Universidad del Valle
-  "@galileo.edu",   // Galileo
-  "@uaglobal.edu.gt",
-  "@uac.edu.gt",    // Universidad de Occidente
-  "@panamericana.edu.gt", // Panamericana
+    if (!correoTrim) {
+      newErrors.correo = "El correo es obligatorio";
+    } else if (correoTrim.length < 6 || correoTrim.length > 100) {
+      newErrors.correo = "El correo debe tener entre 6 y 100 caracteres";
+    } else if (!correoRegex.test(correoTrim)) {
+      newErrors.correo = "Formato de correo inválido";
+    } else {
+      const dominioCorreo = correoTrim.split("@")[1]?.toLowerCase() || "";
+      const dominioValido = dominiosValidos.some((domPermitido) =>
+        dominioCorreo === domPermitido.replace("@", "").toLowerCase() ||
+        dominioCorreo.endsWith("." + domPermitido.replace("@", "").toLowerCase())
+      );
 
-  // Entidades financieras guatemaltecas
-  "@banrural.com.gt",
-  "@bi.com.gt",         // Banco Industrial
-  "@bancoagricola.com.gt",
-  "@baccredomatic.com",
-  "@gytcontinental.com.gt",
-  "@bam.com.gt",        // Banco Agromercantil
+      if (!dominioValido) {
+        newErrors.correo = "Dominio no permitido. Usa un correo válido.";
+      } else {
+        delete newErrors.correo;
+      }
+    
 
-  // Empresas y entidades en Guatemala
-  "@intelaf.com",
-  "@cemaco.com",
-  "@prensa.com.gt",
-  "@telgua.com.gt",
-  "@clarogt.com.gt",
-  "@tigo.com.gt",
-  "@agenciasway.com",
-  "@cerveceriacentroamericana.com",
-  "@pollo.campero.com",
-  "@cementosprogreso.com",
-  "@disatel.com.gt",
-  "@grupoalmo.com",
-  "@alimentosmaravilla.com",
-
-  // Dominios corporativos genéricos válidos
-  "@company.com", "@corp.com", "@enterprise.com", "@business.com"
-];
-
-if (!formData.correo.trim()) {
-  newErrors.correo = "El correo es obligatorio";
-} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) {
-  newErrors.correo = "El formato del correo es inválido";
-} else if (!dominiosValidos.some((dominio) => formData.correo.endsWith(dominio))) {
-  newErrors.correo = "Dominio no permitido. Usa un correo valido.";
+    setErrors(newErrors);
+  return;
 }
+
+    
+
 
 
 
@@ -359,7 +386,6 @@ const convertirA64 = (file) => {
       stream.getTracks().forEach((track) => track.stop());
     }
   };
-
 
 
 
