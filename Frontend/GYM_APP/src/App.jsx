@@ -10,11 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
-  const usersData = [
-    { name: "Juan Perez", dpi: "#123-456ABC", status: "Vigente"},
-    { name: "Maria Lopez", dpi: "#123-456ABC", status: "Vencida"},
-    { name: "Ricardo Mendez", dpi: "#123-456ABC", status: "Vigente"},
-  ];
 
   return (
     <Router>
@@ -27,7 +22,7 @@ function App() {
         <Route path="/SiteDinamic" element={<PrivateRoute><SiteDinamic /></PrivateRoute>}>
           {/* ✅ RUTA HIJA */}
           <Route index element={<VistaEnConstruccion />}/>
-          <Route path="VistaUsuarios" element={<VistaUsuarios usersData={usersData} />}/>
+          <Route path="VistaUsuarios" element={<VistaUsuarios/>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>

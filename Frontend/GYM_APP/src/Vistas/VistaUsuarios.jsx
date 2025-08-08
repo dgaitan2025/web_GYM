@@ -1,10 +1,18 @@
 // src/components/Usuarios.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormRegUsuario from '../Formularios/FormRegUsuario'; // Asegúrate que esta ruta sea correcta
 import "./VistaUsuarios.css"
-const Usuarios = ({ usersData }) => {
+import { obtenerClientes } from "../Funciones/IndexClientes";
+const Usuarios = () => {
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
+  const [clientes, setClientes] = useState(null);
+
+  useEffect(() => {
+    obtenerClientes()
+      .then(data => setClientes(data)) // Guardamos el JSON tal cual
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <main className="main">
@@ -37,27 +45,34 @@ const Usuarios = ({ usersData }) => {
             </tr>
           </thead>
           <tbody>
-            {usersData
-              .filter((u) => u.name.toLowerCase().includes(search.toLowerCase()))
-              .map((user, idx) => (
-                <tr key={idx}>
-                  
-                  <td>{user.name}</td>
-                  <td>{user.dpi}</td>
-                  <td className={user.status === "Vigente" ? "status-vigente" : "status-vencida"}>
-                    {user.status}
-                  </td>
-                  
-                  <td>
-                    <button className="edit">Editar</button>
-                    {user.status === "Vencida" ? (
-                      <button className="renew">Renovar</button>
-                    ) : (
-                      <button className="delete">Eliminar</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+            {clientes &&
+              clientes
+                .filter((u) =>
+                  u.Nombre.toLowerCase().includes(search.toLowerCase())
+                )
+                .map((user, idx) => (
+                  <tr key={idx}>
+                    <td>{user.Nombre}</td>
+                    <td>{user.Numero_Identificacion}</td>
+                    <td
+                      className={
+                        user.Estado_Membresia === "Vigente"
+                          ? "status-vigente"
+                          : "status-vencida"
+                      }
+                    >
+                      {user.Estado_Membresia}
+                    </td>
+                    <td>
+                      <button className="edit">Editar</button>
+                      {user.Estado_Membresia === "Vencida" ? (
+                        <button className="renew">Renovar</button>
+                      ) : (
+                        <button className="delete">Eliminar</button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
