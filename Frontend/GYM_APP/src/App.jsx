@@ -11,6 +11,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
 
+
   return (
     <Router>
       <Routes>
@@ -22,7 +23,7 @@ function App() {
         <Route path="/SiteDinamic" element={<PrivateRoute><SiteDinamic /></PrivateRoute>}>
           {/* ✅ RUTA HIJA */}
           <Route index element={<VistaEnConstruccion />}/>
-          <Route path="VistaUsuarios" element={<VistaUsuarios/>}/>
+          <Route path="VistaUsuarios" element={<VistaUsuarios />}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>

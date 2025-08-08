@@ -1,6 +1,6 @@
 // services/ClienteService.js
 
-const URL = 'https://Compiladores2025.somee.com/api/Clientes';
+const URL = 'https://Compiladores2025.somee.com/api/Clientes/ClientesCrear';
 
 export const insertarCliente = async (clienteData) => {
   try {
