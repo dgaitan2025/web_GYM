@@ -11,9 +11,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
   const usersData = [
-    { id: "03", name: "Juan Perez", dpi: "#123-456ABC", status: "Vigente", expiration: "2025", attendance: "14/05/2025" },
-    { id: "04", name: "Maria Lopez", dpi: "#123-456ABC", status: "Vencida", expiration: "2025", attendance: "14/05/2025" },
-    { id: "05", name: "Ricardo Mendez", dpi: "#123-456ABC", status: "Vigente", expiration: "2025", attendance: "14/05/2025" },
+    { name: "Juan Perez", dpi: "#123-456ABC", status: "Vigente"},
+    { name: "Maria Lopez", dpi: "#123-456ABC", status: "Vencida"},
+    { name: "Ricardo Mendez", dpi: "#123-456ABC", status: "Vigente"},
   ];
 
   return (

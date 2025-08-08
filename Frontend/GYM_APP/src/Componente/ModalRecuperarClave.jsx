@@ -26,9 +26,7 @@ export default function ModalRecuperarClave({ visible, onClose }) {
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cerrar
-            </button>
+            
             <button type="button" className="btn btn-primary">
               Enviar
             </button>
