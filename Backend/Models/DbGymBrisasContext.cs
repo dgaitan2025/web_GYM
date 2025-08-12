@@ -23,19 +23,21 @@ public partial class DbGymBrisasContext : DbContext
 
     public virtual DbSet<Cliente> Clientes { get; set; }
 
+    public virtual DbSet<ClientesMembresia> ClientesMembresias { get; set; }
+
     public virtual DbSet<Controladore> Controladores { get; set; }
 
     public virtual DbSet<Empleado> Empleados { get; set; }
-
-    public virtual DbSet<Factura> Facturas { get; set; }
-
-    public virtual DbSet<FacturasDetalle> FacturasDetalles { get; set; }
 
     public virtual DbSet<GruposMusculare> GruposMusculares { get; set; }
 
     public virtual DbSet<Membresia> Membresias { get; set; }
 
     public virtual DbSet<MetodosPago> MetodosPagos { get; set; }
+
+    public virtual DbSet<Ordene> Ordenes { get; set; }
+
+    public virtual DbSet<OrdenesDetalle> OrdenesDetalles { get; set; }
 
     public virtual DbSet<RegistroDiario> RegistroDiarios { get; set; }
 
@@ -55,9 +57,8 @@ public partial class DbGymBrisasContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-    //=> optionsBuilder.UseSqlServer("Server=DESKTOP-JVIPVHC\\MSSQLSERVER01;Database=db_GymBrisas;Trusted_Connection=True;TrustServerCertificate=True;");
-        => optionsBuilder.UseSqlServer("Data Source=db_GymBrisas.mssql.somee.com;Initial Catalog=db_GymBrisas;User ID=Ricardo802_SQLLogin_1;Password=jud5snrpzl;Packet Size=4096;Persist Security Info=False;TrustServerCertificate=True;");
-
+    //=> optionsBuilder.UseSqlServer("Data Source=db_GymBrisas.mssql.somee.com;Initial Catalog=db_GymBrisas;User ID=Ricardo802_SQLLogin_1;Password=jud5snrpzl;Packet Size=4096;Persist Security Info=False;TrustServerCertificate=True;");
+    => optionsBuilder.UseSqlServer("Server=DESKTOP-JVIPVHC\\MSSQLSERVER01;Database=db_GymBrisas;Trusted_Connection=True;TrustServerCertificate=True;");
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Accione>(entity =>
@@ -142,12 +143,16 @@ public partial class DbGymBrisasContext : DbContext
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
             entity.Property(e => e.FechaNacimiento).HasColumnName("Fecha_Nacimiento");
-            entity.Property(e => e.Foto).HasColumnType("text");
+            entity.Property(e => e.Foto).IsUnicode(false);
             entity.Property(e => e.IdMembresia).HasColumnName("Id_Membresia");
             entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+            entity.Property(e => e.NumeroIdentificacion)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("Numero_Identificacion");
 
             entity.HasOne(d => d.IdMembresiaNavigation).WithMany(p => p.Clientes)
                 .HasForeignKey(d => d.IdMembresia)
@@ -158,6 +163,27 @@ public partial class DbGymBrisasContext : DbContext
                 .HasForeignKey(d => d.IdUsuario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Clientes_Usuario");
+        });
+
+        modelBuilder.Entity<ClientesMembresia>(entity =>
+        {
+            entity.HasKey(e => e.IdRegistro).HasName("PK__Clientes__3E5D8D4E70EE8B60");
+
+            entity.ToTable("Clientes_Membresias");
+
+            entity.Property(e => e.IdRegistro).HasColumnName("Id_Registro");
+            entity.Property(e => e.FechaFin).HasColumnName("Fecha_Fin");
+            entity.Property(e => e.FechaInicio).HasColumnName("Fecha_Inicio");
+            entity.Property(e => e.IdCliente).HasColumnName("Id_Cliente");
+            entity.Property(e => e.IdMembresia).HasColumnName("Id_Membresia");
+
+            entity.HasOne(d => d.IdClienteNavigation).WithMany(p => p.ClientesMembresia)
+                .HasForeignKey(d => d.IdCliente)
+                .HasConstraintName("FK__Clientes___Id_Cl__7FB5F314");
+
+            entity.HasOne(d => d.IdMembresiaNavigation).WithMany(p => p.ClientesMembresia)
+                .HasForeignKey(d => d.IdMembresia)
+                .HasConstraintName("FK__Clientes___Id_Me__00AA174D");
         });
 
         modelBuilder.Entity<Controladore>(entity =>
@@ -208,59 +234,6 @@ public partial class DbGymBrisasContext : DbContext
                 .HasConstraintName("FK_Empleados_Usuario");
         });
 
-        modelBuilder.Entity<Factura>(entity =>
-        {
-            entity.HasKey(e => e.IdFactura).HasName("PK__Facturas__A6DB93626730DBA0");
-
-            entity.HasIndex(e => e.IdSucursal, "IX_Facturas_Id_Sucursal");
-
-            entity.HasIndex(e => e.IdUsuario, "IX_Facturas_Id_Usuario");
-
-            entity.Property(e => e.IdFactura).HasColumnName("Id_factura");
-            entity.Property(e => e.Estado)
-                .HasDefaultValue(true)
-                .HasColumnName("estado");
-            entity.Property(e => e.FechaEmision)
-                .HasColumnType("datetime")
-                .HasColumnName("Fecha_Emision");
-            entity.Property(e => e.IdSucursal).HasColumnName("Id_Sucursal");
-            entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
-
-            entity.HasOne(d => d.IdSucursalNavigation).WithMany(p => p.Facturas)
-                .HasForeignKey(d => d.IdSucursal)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Facturas_Sucursal");
-
-            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Facturas)
-                .HasForeignKey(d => d.IdUsuario)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Facturas_Usuario");
-        });
-
-        modelBuilder.Entity<FacturasDetalle>(entity =>
-        {
-            entity.HasKey(e => e.IdDetalle).HasName("PK__Facturas__9274780B933AF07F");
-
-            entity.ToTable("Facturas_Detalles");
-
-            entity.HasIndex(e => e.IdFactura, "IX_Facturas_Detalles_Id_Factura");
-
-            entity.Property(e => e.IdDetalle).HasColumnName("Id_Detalle");
-            entity.Property(e => e.IdFactura).HasColumnName("Id_Factura");
-            entity.Property(e => e.IdMetodo).HasColumnName("Id_Metodo");
-            entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
-
-            entity.HasOne(d => d.IdFacturaNavigation).WithMany(p => p.FacturasDetalles)
-                .HasForeignKey(d => d.IdFactura)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FacturasDetalles_Factura");
-
-            entity.HasOne(d => d.IdMetodoNavigation).WithMany(p => p.FacturasDetalles)
-                .HasForeignKey(d => d.IdMetodo)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FacturasDetalles_Metodo");
-        });
-
         modelBuilder.Entity<GruposMusculare>(entity =>
         {
             entity.HasKey(e => e.IdGrupo).HasName("PK__Grupos_M__ACDDD978004B8A63");
@@ -308,6 +281,64 @@ public partial class DbGymBrisasContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
+        });
+
+        modelBuilder.Entity<Ordene>(entity =>
+        {
+            entity.HasKey(e => e.IdFactura).HasName("PK__Facturas__A6DB93626730DBA0");
+
+            entity.HasIndex(e => e.IdSucursal, "IX_Facturas_Id_Sucursal");
+
+            entity.HasIndex(e => e.IdUsuario, "IX_Facturas_Id_Usuario");
+
+            entity.Property(e => e.IdFactura).HasColumnName("Id_factura");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.FechaEmision)
+                .HasColumnType("datetime")
+                .HasColumnName("Fecha_Emision");
+            entity.Property(e => e.IdSucursal).HasColumnName("Id_Sucursal");
+            entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
+
+            entity.HasOne(d => d.IdSucursalNavigation).WithMany(p => p.Ordenes)
+                .HasForeignKey(d => d.IdSucursal)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Facturas_Sucursal");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Ordenes)
+                .HasForeignKey(d => d.IdUsuario)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Facturas_Usuario");
+        });
+
+        modelBuilder.Entity<OrdenesDetalle>(entity =>
+        {
+            entity.HasKey(e => e.IdDetalle).HasName("PK__Facturas__9274780B933AF07F");
+
+            entity.ToTable("Ordenes_Detalles");
+
+            entity.HasIndex(e => e.IdFactura, "IX_Facturas_Detalles_Id_Factura");
+
+            entity.Property(e => e.IdDetalle).HasColumnName("Id_Detalle");
+            entity.Property(e => e.IdFactura).HasColumnName("Id_Factura");
+            entity.Property(e => e.IdMembresia).HasColumnName("Id_Membresia");
+            entity.Property(e => e.IdMetodo).HasColumnName("Id_Metodo");
+            entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
+
+            entity.HasOne(d => d.IdFacturaNavigation).WithMany(p => p.OrdenesDetalles)
+                .HasForeignKey(d => d.IdFactura)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FacturasDetalles_Factura");
+
+            entity.HasOne(d => d.IdMembresiaNavigation).WithMany(p => p.OrdenesDetalles)
+                .HasForeignKey(d => d.IdMembresia)
+                .HasConstraintName("FK__Facturas___Id_Me__019E3B86");
+
+            entity.HasOne(d => d.IdMetodoNavigation).WithMany(p => p.OrdenesDetalles)
+                .HasForeignKey(d => d.IdMetodo)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FacturasDetalles_Metodo");
         });
 
         modelBuilder.Entity<RegistroDiario>(entity =>

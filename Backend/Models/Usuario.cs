@@ -23,7 +23,7 @@ public partial class Usuario
 
     public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
 
-    public virtual ICollection<Factura> Facturas { get; set; } = new List<Factura>();
-
     public virtual TiposUsuario IdTipoNavigation { get; set; } = null!;
+
+    public virtual ICollection<Ordene> Ordenes { get; set; } = new List<Ordene>();
 }

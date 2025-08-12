@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Clientes": {
+    "/api/Clientes/ClientesIndex": {
       "get": {
         "tags": [
           "Clientes"
@@ -41,7 +41,91 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/Clientes/ClientesDetails/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cliente"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cliente"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cliente"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Clientes/ClientesActualizar/{id}": {
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientesUsuarioEditViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientesUsuarioEditViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientesUsuarioEditViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Clientes/ClientesCrear": {
       "post": {
         "tags": [
           "Clientes"
@@ -89,85 +173,7 @@
         }
       }
     },
-    "/api/Clientes/{id}": {
-      "get": {
-        "tags": [
-          "Clientes"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Clientes"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Cliente"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Cliente"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Cliente"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
+    "/api/Clientes/ClientesEliminar/{id}": {
       "delete": {
         "tags": [
           "Clientes"
@@ -976,6 +982,17 @@
             "type": "boolean",
             "nullable": true
           },
+          "numeroIdentificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientesMembresia": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientesMembresia"
+            },
+            "nullable": true
+          },
           "idMembresiaNavigation": {
             "$ref": "#/components/schemas/Membresia"
           },
@@ -992,9 +1009,61 @@
         },
         "additionalProperties": false
       },
+      "ClientesMembresia": {
+        "type": "object",
+        "properties": {
+          "idRegistro": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idCliente": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idMembresia": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "fechaInicio": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "fechaFin": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "idClienteNavigation": {
+            "$ref": "#/components/schemas/Cliente"
+          },
+          "idMembresiaNavigation": {
+            "$ref": "#/components/schemas/Membresia"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientesUsuarioEditViewModel": {
+        "type": "object",
+        "properties": {
+          "clientes": {
+            "$ref": "#/components/schemas/ClientesViewModel"
+          },
+          "usuario": {
+            "$ref": "#/components/schemas/UsuarioViewModel"
+          }
+        },
+        "additionalProperties": false
+      },
       "ClientesViewModel": {
         "type": "object",
         "properties": {
+          "id_Cliente": {
+            "type": "integer",
+            "format": "int32"
+          },
           "nombre": {
             "type": "string",
             "nullable": true
@@ -1031,6 +1100,10 @@
           "idSucursal": {
             "type": "integer",
             "format": "int32"
+          },
+          "numero_Identificacion": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1138,81 +1211,6 @@
         },
         "additionalProperties": false
       },
-      "Factura": {
-        "type": "object",
-        "properties": {
-          "idFactura": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "idUsuario": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "fechaEmision": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "idSucursal": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "estado": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "facturasDetalles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FacturasDetalle"
-            },
-            "nullable": true
-          },
-          "idSucursalNavigation": {
-            "$ref": "#/components/schemas/Sucursale"
-          },
-          "idUsuarioNavigation": {
-            "$ref": "#/components/schemas/Usuario"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FacturasDetalle": {
-        "type": "object",
-        "properties": {
-          "idDetalle": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "idFactura": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "idMetodo": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "monto": {
-            "type": "number",
-            "format": "double"
-          },
-          "referencia": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "idFacturaNavigation": {
-            "$ref": "#/components/schemas/Factura"
-          },
-          "idMetodoNavigation": {
-            "$ref": "#/components/schemas/MetodosPago"
-          }
-        },
-        "additionalProperties": false
-      },
       "GruposMusculare": {
         "type": "object",
         "properties": {
@@ -1265,10 +1263,29 @@
             "type": "boolean",
             "nullable": true
           },
+          "vigencia": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "clientes": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Cliente"
+            },
+            "nullable": true
+          },
+          "clientesMembresia": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientesMembresia"
+            },
+            "nullable": true
+          },
+          "ordenesDetalles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrdenesDetalle"
             },
             "nullable": true
           }
@@ -1290,12 +1307,95 @@
             "type": "boolean",
             "nullable": true
           },
-          "facturasDetalles": {
+          "ordenesDetalles": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FacturasDetalle"
+              "$ref": "#/components/schemas/OrdenesDetalle"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Ordene": {
+        "type": "object",
+        "properties": {
+          "idFactura": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idUsuario": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaEmision": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idSucursal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estado": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "idSucursalNavigation": {
+            "$ref": "#/components/schemas/Sucursale"
+          },
+          "idUsuarioNavigation": {
+            "$ref": "#/components/schemas/Usuario"
+          },
+          "ordenesDetalles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrdenesDetalle"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrdenesDetalle": {
+        "type": "object",
+        "properties": {
+          "idDetalle": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idFactura": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idMetodo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monto": {
+            "type": "number",
+            "format": "double"
+          },
+          "referencia": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idMembresia": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idFacturaNavigation": {
+            "$ref": "#/components/schemas/Ordene"
+          },
+          "idMembresiaNavigation": {
+            "$ref": "#/components/schemas/Membresia"
+          },
+          "idMetodoNavigation": {
+            "$ref": "#/components/schemas/MetodosPago"
           }
         },
         "additionalProperties": false
@@ -1425,10 +1525,10 @@
             },
             "nullable": true
           },
-          "facturas": {
+          "ordenes": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Factura"
+              "$ref": "#/components/schemas/Ordene"
             },
             "nullable": true
           },
@@ -1550,15 +1650,15 @@
             },
             "nullable": true
           },
-          "facturas": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Factura"
-            },
-            "nullable": true
-          },
           "idTipoNavigation": {
             "$ref": "#/components/schemas/TiposUsuario"
+          },
+          "ordenes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ordene"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

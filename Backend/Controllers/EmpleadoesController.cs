@@ -1,18 +1,11 @@
 ﻿using Api_Empleados.Funciones;
 using Api_Empleados.Models;
 using Api_Empleados.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Api_Empleados.Controllers
 {
