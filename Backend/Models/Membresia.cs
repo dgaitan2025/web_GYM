@@ -15,5 +15,11 @@ public partial class Membresia
 
     public bool? Estado { get; set; }
 
+    public int? Vigencia { get; set; }
+
     public virtual ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
+
+    public virtual ICollection<ClientesMembresia> ClientesMembresia { get; set; } = new List<ClientesMembresia>();
+
+    public virtual ICollection<OrdenesDetalle> OrdenesDetalles { get; set; } = new List<OrdenesDetalle>();
 }

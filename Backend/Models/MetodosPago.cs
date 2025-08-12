@@ -11,5 +11,5 @@ public partial class MetodosPago
 
     public bool? Estado { get; set; }
 
-    public virtual ICollection<FacturasDetalle> FacturasDetalles { get; set; } = new List<FacturasDetalle>();
+    public virtual ICollection<OrdenesDetalle> OrdenesDetalles { get; set; } = new List<OrdenesDetalle>();
 }

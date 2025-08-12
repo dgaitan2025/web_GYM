@@ -15,7 +15,7 @@ public partial class Sucursale
 
     public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
 
-    public virtual ICollection<Factura> Facturas { get; set; } = new List<Factura>();
+    public virtual ICollection<Ordene> Ordenes { get; set; } = new List<Ordene>();
 
     public virtual ICollection<SucursalesCliente> SucursalesClientes { get; set; } = new List<SucursalesCliente>();
 }

@@ -292,3 +292,16 @@ C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\SixLabors.ImageSh
 C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\de\PdfSharpCore.resources.dll
 C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\web_GYM\Frontend\GYM_APP\package-lock.json
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\web_GYM\Frontend\GYM_APP\package.json
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\img\Plantilla.png
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\ADIMATTEO.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\APDimatteoPerez.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\CPEREZ.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\CSPerezMejia.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\CSPerezMejilla.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\CSPerezMejilla1.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\CSPerezMejilla2.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\JANTI.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\LFBarillasOrozco1.pdf
+C:\Users\Ricardo\source\repos\Api_Empleados\bin\Release\net8.0\Recursos\pdfs\LFBarillasOrozco2.pdf

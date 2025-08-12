@@ -25,6 +25,10 @@ public partial class Cliente
 
     public bool? Estado { get; set; }
 
+    public string? NumeroIdentificacion { get; set; }
+
+    public virtual ICollection<ClientesMembresia> ClientesMembresia { get; set; } = new List<ClientesMembresia>();
+
     public virtual Membresia IdMembresiaNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
