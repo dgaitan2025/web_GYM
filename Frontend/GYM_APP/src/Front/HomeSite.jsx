@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HomeSite.css";
 
@@ -16,8 +16,10 @@ export default function Home() {
   return (
     <>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-md bg-light shadow-sm py-0 px-4 sticky-top">
-        <div className="container-sm d-flex flex-column flex-md-row justify-content-between align-items-center py-2">
+
+
+      <nav className="navbar navbar-expand-md  navbar-dark shadow-sm px-4 fixed-top bg-black-transparent">
+        <div className="container-sm ">
           <div className="logo" onClick={scrollToTop} style={{ cursor: "pointer" }}>
             <img src="/fit.jpg" alt="Logo GYM" className="logo-img" style={{ height: "75px" }} />
           </div>
@@ -27,7 +29,7 @@ export default function Home() {
           </button>
 
           <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
-            <ul className="navbar-nav ms-auto mb-2 mb-md-0 gap-3">
+            <ul className="navbar-nav ms-auto mb-2 mb-md-0 gap-3 color-text">
               {["servicios", "horarios", "ubicacion", "contacto"].map((section) => (
                 <li className="nav-item" key={section}>
                   <a
@@ -54,8 +56,8 @@ export default function Home() {
         id="carouselExampleIndicators"
         className="carousel slide custom-carousel"
         data-bs-ride="carousel"
-        data-bs-interval="3000"
-      >
+        data-bs-interval="3000" >
+      
         <div className="carousel-indicators">
           {[0, 1, 2].map((i) => (
             <button
@@ -99,19 +101,19 @@ export default function Home() {
       </div>
 
       {/* Secciones principales */}
-      <main >
-        <section id="servicios" className="mb-5">
+    
+        <section id="servicios">
           <h2>Servicios</h2>
-          <ul>
-            <li>Área de pesas libres y máquinas de fuerza.</li>
-            <li>Zona de cardio (cintas, elípticas, bicicletas, escaladoras).</li>
-            <li>Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.).</li>
-            <li>Vestuarios y duchas.</li>
-            <li>Locker o casilleros de seguridad.</li>
-          </ul>
+          <p>
+            Área de pesas libres y máquinas de fuerza.<br />
+            Zona de cardio (cintas, elípticas, bicicletas, escaladoras).<br />
+           Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.).<br />
+            Vestuarios y duchas.<br />
+            Locker o casilleros de seguridad.<br />
+          </p>
         </section>
 
-        <section id="horarios" className="mb-5">
+        <section id="horarios" >
           <h2>Horarios</h2>
           <p>
             Lunes a Viernes: 5:00 a.m. – 10:00 p.m.<br />
@@ -119,7 +121,7 @@ export default function Home() {
           </p>
         </section>
 
-        <section id="ubicacion" className="mb-5">
+        <section id="ubicacion" >
           <h2>Ubicación</h2>
           <p>Colonia Las Brisas, Zona 6, Mixco, Guatemala.</p>
         </section>
@@ -131,7 +133,7 @@ export default function Home() {
             Correo: <a href="mailto:maljoss69@gmail.com">maljoss69@gmail.com</a>
           </p>
         </section>
-      </main>
+  
     </>
   );
 }

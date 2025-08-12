@@ -48,7 +48,8 @@ const Usuarios = () => {
             {clientes &&
               clientes
                 .filter((u) =>
-                  u.Nombre.toLowerCase().includes(search.toLowerCase())
+                  u.Numero_Identificacion.toLowerCase().includes(search.toLowerCase())
+                
                 )
                 .map((user, idx) => (
                   <tr key={idx}>
