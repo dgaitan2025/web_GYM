@@ -1,27 +1,15 @@
 
-html {
-  scroll-padding-top: 105px; /* desplazamiento con anclas */
-}
-
-/* navbar  */
-
-.bg-black-transparent{
-background-color: rgba(0, 0, 0, 0.79);
-border-top-right-radius: 10px;
-border-top-left-radius: 10px;
-} 
-
-/* Carousel*/
+/* Ajusta el alto del carrusel */
 .custom-carousel {
   width: 100%;
   height: auto;
-  margin-top: 105px;
   max-height: 500px;
   overflow: hidden;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
+/* Hace que la imagen se escale sin deformarse */
 .carousel-img {
   width: 100%;
   height: auto;
@@ -29,19 +17,43 @@ border-top-left-radius: 10px;
   object-fit: cover;
 }
 
-/*secciones*/
+.logo {
+  
+  
+  align-items: center;
+  gap: 1.5rem; /* espacio entre imagen y texto */
+  padding-top: 0.5rem;
+}
+
+.logo-img {
+  
+  width: 80px;  /* ajusta el tamaño */
+  height: 80px;
+  border-radius: 50%; /* ✅ Si quieres que se vea circular */
+  object-fit: cover;
+}
+
+
+
+/* ============================= */
+/* SECCIONES */
+/* ============================= */
 section {
-  display: flex;
-  flex-direction: column;
-  height: 400px;
+  scroll-margin-top: 100px;
   padding: 10rem 1rem;
-  background-color: #f8f9fa;
-  scroll-margin-top: 120px;
   text-align: center;
+  margin: 2rem auto;
+  max-width: 100%;
+  background: #ffffffcc; /* blanco con ligera transparencia */
+  border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   border: 1px solid #e0e0e0;
-  align-items: center;    /* Centra horizontalmente */
-  justify-content: center; /* Centra verticalmente */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 section h2 {
@@ -49,7 +61,16 @@ section h2 {
   color: #222;
   margin-bottom: 1rem;
   position: relative;
-  
+}
+
+section h2::after {
+  content: "";
+  width: 60px;
+  height: 3px;
+  background-color: #222;
+  display: block;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
 }
 
 section p {
@@ -60,3 +81,25 @@ section p {
   margin: 0 auto 1rem;
 }
 
+section ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+section ul li {
+  padding: 0.5rem 0;
+  color: #444;
+  font-size: 1rem;
+}
+
+/* En móviles, reduce el alto si es necesario */
+@media (max-width: 576px) {
+  .custom-carousel {
+    max-height: 300px;
+  }
+
+  .carousel-img {
+    max-height: 300px;
+  }
+}

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> parent of b4e7a9a (Se modifica y optimiza codigo de bienvenida)
 import { useNavigate } from "react-router-dom";
 import CircularIndeterminate  from "../Componente/BarraProgreso"
 import "./HomeSite.css";
@@ -27,10 +31,8 @@ export default function Home() {
   return (
     <>
       {/* Navbar */}
-
-
-      <nav className="navbar navbar-expand-md  navbar-dark shadow-sm px-4 fixed-top bg-black-transparent">
-        <div className="container-sm ">
+      <nav className="navbar navbar-expand-md bg-light shadow-sm py-0 px-4 sticky-top">
+        <div className="container-sm d-flex flex-column flex-md-row justify-content-between align-items-center py-2">
           <div className="logo" onClick={scrollToTop} style={{ cursor: "pointer" }}>
             <img src="/fit.jpg" alt="Logo GYM" className="logo-img" style={{ height: "75px" }} />
           </div>
@@ -40,7 +42,7 @@ export default function Home() {
           </button>
 
           <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
-            <ul className="navbar-nav ms-auto mb-2 mb-md-0 gap-3 color-text">
+            <ul className="navbar-nav ms-auto mb-2 mb-md-0 gap-3">
               {["servicios", "horarios", "ubicacion", "contacto"].map((section) => (
                 <li className="nav-item" key={section}>
                   <a
@@ -70,8 +72,13 @@ export default function Home() {
         id="carouselExampleIndicators"
         className="carousel slide custom-carousel"
         data-bs-ride="carousel"
+<<<<<<< HEAD
         data-bs-interval="3000" >
 
+=======
+        data-bs-interval="3000"
+      >
+>>>>>>> parent of b4e7a9a (Se modifica y optimiza codigo de bienvenida)
         <div className="carousel-indicators">
           {[0, 1, 2].map((i) => (
             <button
@@ -115,6 +122,7 @@ export default function Home() {
       </div>
 
       {/* Secciones principales */}
+<<<<<<< HEAD
 
       <section id="servicios">
         <h2>Servicios</h2>
@@ -148,6 +156,41 @@ export default function Home() {
         </p>
       </section>
 
+=======
+      <main >
+        <section id="servicios" className="mb-5">
+          <h2>Servicios</h2>
+          <ul>
+            <li>Área de pesas libres y máquinas de fuerza.</li>
+            <li>Zona de cardio (cintas, elípticas, bicicletas, escaladoras).</li>
+            <li>Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.).</li>
+            <li>Vestuarios y duchas.</li>
+            <li>Locker o casilleros de seguridad.</li>
+          </ul>
+        </section>
+
+        <section id="horarios" className="mb-5">
+          <h2>Horarios</h2>
+          <p>
+            Lunes a Viernes: 5:00 a.m. – 10:00 p.m.<br />
+            Sábado y Domingo: 6:00 a.m. – 9:00 p.m.
+          </p>
+        </section>
+
+        <section id="ubicacion" className="mb-5">
+          <h2>Ubicación</h2>
+          <p>Colonia Las Brisas, Zona 6, Mixco, Guatemala.</p>
+        </section>
+
+        <section id="contacto" >
+          <h2>Contacto</h2>
+          <p>
+            Teléfono: 2484-6583 <br />
+            Correo: <a href="mailto:maljoss69@gmail.com">maljoss69@gmail.com</a>
+          </p>
+        </section>
+      </main>
+>>>>>>> parent of b4e7a9a (Se modifica y optimiza codigo de bienvenida)
     </>
   );
 }
