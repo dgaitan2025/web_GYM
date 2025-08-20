@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen();
 
 // Registramos el contexto generado por Scaffold
 builder.Services.AddDbContext<DbGymBrisasContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RemoteConnection")));
 
 var app = builder.Build();
 

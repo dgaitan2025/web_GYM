@@ -7,7 +7,6 @@
     }
     public class ClientesViewModel
     {
-        public int Id_Cliente { get; set; }
         public string Nombre { get; set; } = null!;
 
         public string Apellido { get; set; } = null!;
@@ -25,7 +24,6 @@
         public int IdMembresia { get; set; }
 
         public int IdSucursal { get; set; }
-        public string? Numero_Identificacion { get; set; }
     }
 
 }
