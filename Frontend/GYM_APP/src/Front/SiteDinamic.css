@@ -96,12 +96,21 @@ html, body, #root {
 
 /* --- SECCIÓN PRINCIPAL --- */
 section {
-  flex: 4;
+  flex: auto;
   padding: 2rem;
-  margin: 0;
+  margin: 10px;
   overflow: auto;
 }
 
+.content {
+  flex: 1 1 auto;
+  min-width: 0;           /* evita overflow horizontal inesperado */
+  min-height: 0;          /* permite que el scroll interno funcione */
+  padding: 2rem;
+  margin: 10px;           /* si usas navbar fixed, quizá prefieras margin: 10px 10px 10px 10px */
+  overflow: auto;         /* scroll propio del área de contenido */
+  box-sizing: border-box;
+}
 
 
 /* HAMBURGUESA */

@@ -1,4 +1,4 @@
-// services/ClienteService.js
+//API para la insertar clientes 
 
 const URL = 'https://Compiladores2025.somee.com/api/Clientes/ClientesCrear';
 
@@ -15,7 +15,7 @@ export const insertarCliente = async (clienteData) => {
     if (!response.ok) throw new Error('Error al insertar');
 
     const data = await response.json();
-    return data; // Esperamos que `data` tenga el número 1 si se insertó correctamente
+    return data;
 
   } catch (error) {
     console.error('Error al insertar cliente:', error);

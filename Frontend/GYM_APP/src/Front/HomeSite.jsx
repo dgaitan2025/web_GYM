@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CircularIndeterminate  from "../Componente/BarraProgreso"
 import "./HomeSite.css";
+
+
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const scrollToTop = () =>
@@ -12,6 +16,13 @@ export default function Home() {
       top: 0,
       behavior: "smooth",
     });
+
+  useEffect(() => {
+    console.log("✅ Página Home montada");
+    setOpen(true); // Abre el modal automáticamente al entrar
+    return () => console.log("❌ Página Home desmontada");
+  }, []);
+
 
   return (
     <>
@@ -42,9 +53,12 @@ export default function Home() {
                 </li>
               ))}
               <li className="nav-item">
-                <button className="btn btn-outline-primary" onClick={() => navigate("/login")}>
+                <button className="btn btn-outline-primary" onClick={() => { setOpen(true); navigate("/login") }} >
                   Login
                 </button>
+                
+
+
               </li>
             </ul>
           </div>
@@ -57,7 +71,7 @@ export default function Home() {
         className="carousel slide custom-carousel"
         data-bs-ride="carousel"
         data-bs-interval="3000" >
-      
+
         <div className="carousel-indicators">
           {[0, 1, 2].map((i) => (
             <button
@@ -101,39 +115,39 @@ export default function Home() {
       </div>
 
       {/* Secciones principales */}
-    
-        <section id="servicios">
-          <h2>Servicios</h2>
-          <p>
-            Área de pesas libres y máquinas de fuerza.<br />
-            Zona de cardio (cintas, elípticas, bicicletas, escaladoras).<br />
-           Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.).<br />
-            Vestuarios y duchas.<br />
-            Locker o casilleros de seguridad.<br />
-          </p>
-        </section>
 
-        <section id="horarios" >
-          <h2>Horarios</h2>
-          <p>
-            Lunes a Viernes: 5:00 a.m. – 10:00 p.m.<br />
-            Sábado y Domingo: 6:00 a.m. – 9:00 p.m.
-          </p>
-        </section>
+      <section id="servicios">
+        <h2>Servicios</h2>
+        <p>
+          Área de pesas libres y máquinas de fuerza.<br />
+          Zona de cardio (cintas, elípticas, bicicletas, escaladoras).<br />
+          Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.).<br />
+          Vestuarios y duchas.<br />
+          Locker o casilleros de seguridad.<br />
+        </p>
+      </section>
 
-        <section id="ubicacion" >
-          <h2>Ubicación</h2>
-          <p>Colonia Las Brisas, Zona 6, Mixco, Guatemala.</p>
-        </section>
+      <section id="horarios" >
+        <h2>Horarios</h2>
+        <p>
+          Lunes a Viernes: 5:00 a.m. – 10:00 p.m.<br />
+          Sábado y Domingo: 6:00 a.m. – 9:00 p.m.
+        </p>
+      </section>
 
-        <section id="contacto" >
-          <h2>Contacto</h2>
-          <p>
-            Teléfono: 2484-6583 <br />
-            Correo: <a href="mailto:maljoss69@gmail.com">maljoss69@gmail.com</a>
-          </p>
-        </section>
-  
+      <section id="ubicacion" >
+        <h2>Ubicación</h2>
+        <p>Colonia Las Brisas, Zona 6, Mixco, Guatemala.</p>
+      </section>
+
+      <section id="contacto" >
+        <h2>Contacto</h2>
+        <p>
+          Teléfono: 2484-6583 <br />
+          Correo: <a href="mailto:maljoss69@gmail.com">maljoss69@gmail.com</a>
+        </p>
+      </section>
+
     </>
   );
 }

@@ -10,6 +10,14 @@ export default function Login() {
   const [recordar, setRecordar] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
 
+  useEffect(() => {
+    console.log("✅ La página PaginaEjemplo se montó correctamente");
+    // Limpieza al desmontar
+    return () => {
+      console.log("❌ La página PaginaEjemplo se desmontó");
+    };
+  }, []);
+
   const RecuperarClave = () => {
     setMostrarModal(true);
   };
@@ -34,7 +42,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://Compiladores2025.somee.com/api/Empleadoes/login", {
+      const res = await fetch("https://Compiladores2025.somee.com/api/Login/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

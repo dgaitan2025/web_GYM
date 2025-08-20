@@ -81,8 +81,7 @@ export default function SiteDinamic() {
           </div>
         </aside>
       )}
-      <section>
-
+      <section className="content">
         <Outlet />
       </section>
     </div>
