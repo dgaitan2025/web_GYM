@@ -81,7 +81,10 @@ function Formulario({ onClose }) {
   useEffect(() => {
     axios
       .get("https://Compiladores2025.somee.com/api/Clientes/listarmembresias")
-      .then((response) => setMembresias(response.data))
+      .then((response) => {
+      console.log("Datos recibidos:", response.data); // 👈 imprime en consola
+      setMembresias(response.data);
+    })
       .catch((error) => console.error("Error al obtener membresías:", error));
 
     return () => {
@@ -397,8 +400,8 @@ function Formulario({ onClose }) {
                 >
                   <option value="" disabled hidden>Seleccione una opción</option>
                   {membresias.map((m) => (
-                    <option key={m.IdMembresia} value={m.IdMembresia}>
-                      {m.Descripcion}
+                    <option key={m.idMembresia} value={m.idMembresia}>
+                      {m.descripcion}
                     </option>
                   ))}
                 </select>

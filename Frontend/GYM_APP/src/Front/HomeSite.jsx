@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useState, useEffect } from "react";
-=======
-import React, { useState } from "react";
->>>>>>> parent of b4e7a9a (Se modifica y optimiza codigo de bienvenida)
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CircularIndeterminate  from "../Componente/BarraProgreso"
 import "./HomeSite.css";
@@ -72,13 +68,8 @@ export default function Home() {
         id="carouselExampleIndicators"
         className="carousel slide custom-carousel"
         data-bs-ride="carousel"
-<<<<<<< HEAD
-        data-bs-interval="3000" >
-
-=======
         data-bs-interval="3000"
       >
->>>>>>> parent of b4e7a9a (Se modifica y optimiza codigo de bienvenida)
         <div className="carousel-indicators">
           {[0, 1, 2].map((i) => (
             <button
@@ -122,41 +113,6 @@ export default function Home() {
       </div>
 
       {/* Secciones principales */}
-<<<<<<< HEAD
-
-      <section id="servicios">
-        <h2>Servicios</h2>
-        <p>
-          Área de pesas libres y máquinas de fuerza.<br />
-          Zona de cardio (cintas, elípticas, bicicletas, escaladoras).<br />
-          Clases grupales (spinning, zumba, aeróbicos, funcional, body pump, etc.).<br />
-          Vestuarios y duchas.<br />
-          Locker o casilleros de seguridad.<br />
-        </p>
-      </section>
-
-      <section id="horarios" >
-        <h2>Horarios</h2>
-        <p>
-          Lunes a Viernes: 5:00 a.m. – 10:00 p.m.<br />
-          Sábado y Domingo: 6:00 a.m. – 9:00 p.m.
-        </p>
-      </section>
-
-      <section id="ubicacion" >
-        <h2>Ubicación</h2>
-        <p>Colonia Las Brisas, Zona 6, Mixco, Guatemala.</p>
-      </section>
-
-      <section id="contacto" >
-        <h2>Contacto</h2>
-        <p>
-          Teléfono: 2484-6583 <br />
-          Correo: <a href="mailto:maljoss69@gmail.com">maljoss69@gmail.com</a>
-        </p>
-      </section>
-
-=======
       <main >
         <section id="servicios" className="mb-5">
           <h2>Servicios</h2>
@@ -190,7 +146,6 @@ export default function Home() {
           </p>
         </section>
       </main>
->>>>>>> parent of b4e7a9a (Se modifica y optimiza codigo de bienvenida)
     </>
   );
 }
