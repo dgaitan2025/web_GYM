@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalRecuperarClave from '../Componente/ModalRecuperarClave';
 import "./Login.css";
@@ -64,7 +64,7 @@ export default function Login() {
           localStorage.removeItem('recordarEmail');
         }
         localStorage.setItem("isLogged", "true");
-        localStorage.setItem("id_usuario", data.id_usuario); // Guardamos el ID si lo necesitas
+        localStorage.setItem("tipoUser", data.Tipo_Usuario);
         navigate("/sitedinamic");
       } else {
         alert("❌ Credenciales incorrectas");
@@ -126,10 +126,10 @@ export default function Login() {
             Ingresar
           </button>
         </form>
-<ModalRecuperarClave visible={mostrarModal} onClose={CerrarModal} />
+        <ModalRecuperarClave visible={mostrarModal} onClose={CerrarModal} />
       </div>
 
-     
+
     </div>
   );
 }
