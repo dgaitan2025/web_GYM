@@ -392,7 +392,7 @@ function Formulario({ onClose }) {
 
               <div>
                 <label>Membresía:</label>
-                <select
+                <select className="Membresias"
                   name="membresiaId"
                   value={formData.membresiaId}
                   onChange={handleChange}

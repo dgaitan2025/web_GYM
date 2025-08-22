@@ -51,6 +51,11 @@ body {
   transition: all 0.2s ease;
 }
 
+.formulario .Membresias{
+color: #1c1c1c;
+
+}
+
 .formulario input:focus,
 .formulario select:focus {
   border-color: #6366f1;
