@@ -1,22 +1,15 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalRecuperarClave from '../Componente/ModalRecuperarClave';
+import { login } from "../Funciones/login";
 import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");      // Usado para el campo "usuario"
-  const [password, setPassword] = useState(""); // Usado para "contraseña"
+  const [password, setPassword] = useState("CC0C5C03"); // Usado para "contraseña"
   const [recordar, setRecordar] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
-
-  useEffect(() => {
-    console.log("✅ La página PaginaEjemplo se montó correctamente");
-    // Limpieza al desmontar
-    return () => {
-      console.log("❌ La página PaginaEjemplo se desmontó");
-    };
-  }, []);
 
   const RecuperarClave = () => {
     setMostrarModal(true);
@@ -42,33 +35,23 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://Compiladores2025.somee.com/api/Login/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          usuario: email,        // ✅ La API espera "usuario"
-          contraseña: password,  // ✅ La API espera "contraseña"
-        }),
-      });
-
-      const data = await res.json();
-      //console.log("Respuesta API:", data);
-
-      if (data.success) {
-        //alert(`✅ ${data.message}`);
-        if (recordar) {
-          localStorage.setItem('recordarEmail', email);
-        } else {
-          localStorage.removeItem('recordarEmail');
-        }
-        localStorage.setItem("isLogged", "true");
-        localStorage.setItem("tipoUser", data.Tipo_Usuario);
-        navigate("/sitedinamic");
-      } else {
-        alert("❌ Credenciales incorrectas");
+      const credeciales = {
+        usuario: email,        // ✅ La API espera "usuario"
+        contraseña: password,  // ✅ La API espera "contraseña"
       }
+
+      const parametros = await login(credeciales);
+
+      if (parametros.success) {
+        navigate("/sitedinamic");
+      }
+
+      if (recordar) {
+        localStorage.setItem('recordarEmail', email);
+      } else {
+        localStorage.removeItem('recordarEmail');
+      }
+
     } catch (error) {
       console.error("Error al enviar:", error);
       alert("❌ Error de conexión con la API");

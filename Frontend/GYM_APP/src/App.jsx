@@ -3,7 +3,7 @@ import HomeSite from "./Front/HomeSite";
 import Login from "./Front/Login";
 import SiteDinamic from "./Front/SiteDinamic";
 import FormRegUsuario from "./Formularios/FormRegUsuario"; //formulario usuarios
-import PrivateRoute from "./Funciones/PrivateRoute";
+import { PrivateRoute, RequireRole }  from "./Funciones/PrivateRoute";
 import VistaUsuarios from "./Vistas/VistaUsuarios";
 import VistaEmpleados from "./Vistas/VistaEmpleados";
 import VistaEnConstruccion from "./Vistas/VistaEnConstruccion";
@@ -24,8 +24,8 @@ function App() {
         <Route path="/SiteDinamic" element={<PrivateRoute><SiteDinamic /></PrivateRoute>}>
           {/* ✅ RUTA HIJA */}
           <Route index element={<VistaEnConstruccion />}/>
-          <Route path="VistaUsuarios" element={<VistaUsuarios />}/>
-          <Route path="VistaEmpleados" element={<VistaEmpleados />}/>
+          <Route path="VistaUsuarios" element={<RequireRole roles={[1,2]}><VistaUsuarios/></RequireRole>}/>
+          <Route path="VistaEmpleados" element={<RequireRole roles={[1,2]}><VistaEmpleados /></RequireRole>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>

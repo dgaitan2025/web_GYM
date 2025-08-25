@@ -17,7 +17,6 @@ export default function Home() {
     <>
       {/* Navbar */}
 
-
       <nav className="navbar navbar-expand-md  navbar-dark shadow-sm px-4 fixed-top bg-black-transparent">
         <div className="container-sm ">
           <div className="logo" onClick={scrollToTop} style={{ cursor: "pointer" }}>
@@ -29,7 +28,7 @@ export default function Home() {
           </button>
 
           <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
-            <ul className="navbar-nav ms-auto mb-2 mb-md-0 gap-3 color-text">
+            <ul className="navbar-nav ms-auto mb-2 mb-md-0 gap-3">
               {["servicios", "horarios", "ubicacion", "contacto"].map((section) => (
                 <li className="nav-item" key={section}>
                   <a
