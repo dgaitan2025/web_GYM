@@ -1,0 +1,7 @@
+.dash-admin-container { max-width: 100%; }
+
+/* react-select */
+.DashAdmin__control { width: 100% !important; }
+.DashAdmin__menu-portal { z-index: 9999 !important; }
+
+.dash-admin-content { margin-top: 16px; }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import "./SiteDinamic.css";
+import {decryptString} from "../Funciones/Encriptar"
 
 export default function SiteDinamic() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,7 +12,7 @@ export default function SiteDinamic() {
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const routes = [
-    { path: "/sitedinamic/EnConstruccion", label: "Dashboard", roles: [1,2,3,4] },
+    { path: "/sitedinamic/VistaDashAdmin", label: "Dashboard", roles: [1,2,3,4] },
     { path: "/sitedinamic/EnConstruccion", label: "Membresia", roles: [4] },
     { path: "/sitedinamic/EnConstruccion", label: "Rutinas", roles: [4] },
     { path: "/sitedinamic/EnConstruccion", label: "Asistencia", roles: [4,2] },
@@ -28,7 +29,9 @@ export default function SiteDinamic() {
 
   
 useEffect(() => {
-  const raw = localStorage.getItem("tipoUser"); // p.ej. "1"
+  
+  const raw = decryptString(localStorage.getItem("tipoUser")); // p.ej. "1"
+  console.log("tipo usu " + raw);
   const r = raw !== null ? Number(raw) : null;
 
   if (Number.isFinite(r)) {
