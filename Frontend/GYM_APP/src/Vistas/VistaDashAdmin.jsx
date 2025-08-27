@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import Select from "react-select";
 import { Outlet } from "react-router-dom"; // <-- aquí va Outlet
+import {decryptString} from "../Funciones/Encriptar"
 import "./VistaDashAdmin.css";
 
 const opciones = [
@@ -12,14 +13,11 @@ const opciones = [
 const VistaDashAdmin = () => {
     const [view, setView] = useState(null);
 
-    const role = Number(localStorage.getItem("tipoUser"));
+    const role = Number(decryptString(localStorage.getItem("tipoUser")));
     const opcionesVisibles = useMemo(() => {
         if (!role) return []; // sin rol, sin opciones
         return opciones.filter(d => !d.roles || d.roles.includes(role));
     }, [role]);
-
-
-
 
 
     return (

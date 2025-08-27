@@ -4,7 +4,7 @@ const data = [
   { id: "ventas", label: "Ventas", value: 400 },
   { id: "marketing", label: "Marketing", value: 300 },
   { id: "soporte", label: "Soporte", value: 200 },
-  { id: "desarrollo", label: "Desarrollo", value: 250 },
+  { id: "desarrollo", label: "Desarrollo", value: 450 },
 ];
 
 

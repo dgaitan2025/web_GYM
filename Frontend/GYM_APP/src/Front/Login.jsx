@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalRecuperarClave from '../Componente/ModalRecuperarClave';
 import { login } from "../Funciones/login";
+import { Procesando } from "../Componente/Espera";
 import "./Login.css";
 
 export default function Login() {
+  const { showLoading, closeLoading } = Procesando();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");      // Usado para el campo "usuario"
-  const [password, setPassword] = useState("CC0C5C03"); // Usado para "contraseña"
+  const [password, setPassword] = useState("3BFB9F5A"); // Usado para "contraseña"
   const [recordar, setRecordar] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
 
@@ -32,6 +34,7 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
+    showLoading("Login","Procesando");
     e.preventDefault();
 
     try {
@@ -43,6 +46,7 @@ export default function Login() {
       const parametros = await login(credeciales);
 
       if (parametros.success) {
+        closeLoading(true, "Bienvenido");
         navigate("/sitedinamic");
       }
 
@@ -53,8 +57,7 @@ export default function Login() {
       }
 
     } catch (error) {
-      console.error("Error al enviar:", error);
-      alert("❌ Error de conexión con la API");
+      closeLoading(false, "Error en la respuesta.");
     }
   };
 

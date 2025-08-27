@@ -1,62 +1,36 @@
-// ProcessModal.jsx
-import React, { useEffect } from "react";
+import Swal from "sweetalert2";
 
-export default function Espera({
-  open,
-  status = "loading", // "loading" | "success" | "error"
-  message = "Procesando...",
-  onClose,
-  autoCloseAfter = 1400, // ms (solo cuando success)
-  blockCloseWhileLoading = true,
-}) {
-  useEffect(() => {
-    if (open && status === "success" && autoCloseAfter && onClose) {
-      const t = setTimeout(onClose, autoCloseAfter);
-      return () => clearTimeout(t);
-    }
-  }, [open, status, autoCloseAfter, onClose]);
+export function Procesando() {
+  const showLoading = (title = "", texto="") => {
+    Swal.fire({
+      title,
+      text: texto,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // 🔄 Spinner circular
+      },
+      showConfirmButton: false,
+    });
+  };
 
-  if (!open) return null;
+  const closeLoading = (success = true, message = "") => {
+    Swal.close();
+      if (success) {
+    Swal.fire({
+      title: message,
+      icon: "success",
+      timer: 1500,          // ⏳ Se cierra solo después de 3s
+      showConfirmButton: false, // 👈 Oculta el botón OK
+    });
+  } else {
+    Swal.fire({
+      icon: "error",
+      text: message,
+      timer: 2000,
+      showConfirmButton: false, // 👈 Oculta el botón OK
+    });
+  }
+  };
 
-  const canClose = status !== "loading" || !blockCloseWhileLoading;
-
-  return (
-    <div className="pm-backdrop" onClick={canClose ? onClose : undefined}>
-      <div className="pm-modal" onClick={(e) => e.stopPropagation()}>
-        {status === "loading" && (
-          <>
-            <div className="pm-spinner" />
-            <h3 className="pm-title">Procesando...</h3>
-            <p className="pm-text">{message}</p>
-          </>
-        )}
-
-        {status === "success" && (
-          <>
-            <div className="pm-icon success" aria-hidden>
-              <svg viewBox="0 0 24 24">
-                <path d="M9 12.75l-2-2  -1.5 1.5 3.5 3.5 7.5-7.5 -1.5-1.5z" />
-              </svg>
-            </div>
-            <h3 className="pm-title">¡Hecho!</h3>
-            <p className="pm-text">{message}</p>
-            <button className="pm-btn" onClick={onClose}>Cerrar</button>
-          </>
-        )}
-
-        {status === "error" && (
-          <>
-            <div className="pm-icon error" aria-hidden>
-              <svg viewBox="0 0 24 24">
-                <path d="M12 10.586l4.95-4.95 1.414 1.414L13.414 12l4.95 4.95-1.414 1.414L12 13.414l-4.95 4.95-1.414-1.414L10.586 12 5.636 7.05 7.05 5.636z"/>
-              </svg>
-            </div>
-            <h3 className="pm-title">Algo salió mal</h3>
-            <p className="pm-text">{message}</p>
-            <button className="pm-btn" onClick={onClose}>Cerrar</button>
-          </>
-        )}
-      </div>
-    </div>
-  );
+  return { showLoading, closeLoading };
 }

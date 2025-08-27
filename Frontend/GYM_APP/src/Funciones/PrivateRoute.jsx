@@ -12,7 +12,7 @@ export function PrivateRoute({ children }) {
 export function RequireRole({ roles, children }) {
 
   
-  const userRole = decryptString(localStorage.getItem("tipoUser"));
+  const userRole = Number(decryptString(localStorage.getItem("tipoUser")));
   if (!roles.includes(userRole)) {
     return <Navigate to="/sitedinamic/" replace />;
   }

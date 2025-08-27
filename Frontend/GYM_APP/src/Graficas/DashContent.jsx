@@ -9,7 +9,7 @@ export default function DashContent() {
 
   switch (view) {
     case "GraficoPie":
-      return <RequireRole roles={[2]}><GraficoPie /></RequireRole>;
+      return <RequireRole roles={[1,2]}><GraficoPie /></RequireRole>;
     // case "Membresias":
     //   return <Membresias />;
     default:
