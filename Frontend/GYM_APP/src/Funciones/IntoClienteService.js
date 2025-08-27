@@ -1,9 +1,12 @@
 //API para la insertar clientes 
 
+
 const URL = 'https://Compiladores2025.somee.com/api/Clientes/ClientesCrear';
 
 export const insertarCliente = async (clienteData) => {
+   
   try {
+    
     const response = await fetch(URL, {
       method: 'POST',
       headers: {
@@ -13,12 +16,13 @@ export const insertarCliente = async (clienteData) => {
     });
 
     if (!response.ok) throw new Error('Error al insertar');
-
+      
     const data = await response.json();
     return data;
 
   } catch (error) {
-    console.error('Error al insertar cliente:', error);
+    
+    
     return null;
   }
 };

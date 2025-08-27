@@ -1,42 +1,33 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Front/SiteDinamic";
-import axios from "axios";
 import "./FormRegUsuario.css";
 import { cuiValido, nitValido } from "../Funciones/validaDPI.js";
 import { insertarCliente } from "../Funciones/IntoClienteService";
 import { createPortal } from "react-dom";
+import { Procesando } from "../Componente/Espera";
+import { obtenerMembresias } from "../Funciones/Membresias.js";
 
 const SOLO_LETRAS_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-const CORREO_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-const DOMINIOS_VALIDOS = [
-  "@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@aol.com", "@icloud.com", "@protonmail.com",
-  "@umg.edu.gt", "@usac.edu.gt", "@uvg.edu.gt", "@galileo.edu", "@uaglobal.edu.gt", "@uac.edu.gt", "@panamericana.edu.gt",
-  "@banrural.com.gt", "@bi.com.gt", "@bancoagricola.com.gt", "@baccredomatic.com", "@gytcontinental.com.gt", "@bam.com.gt",
-  "@intelaf.com", "@cemaco.com", "@prensa.com.gt", "@telgua.com.gt", "@clarogt.com.gt", "@tigo.com.gt",
-  "@agenciasway.com", "@cerveceriacentroamericana.com", "@pollo.campero.com", "@cementosprogreso.com",
-  "@disatel.com.gt", "@grupoalmo.com", "@alimentosmaravilla.com", "@company.com", "@corp.com", "@enterprise.com", "@business.com"
-];
 
 // ---------- Helpers de validación ----------
 const normalizarLetras = (v) => v.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
 const normalizarTelefono = (v) => v.replace(/\D/g, "").slice(0, 8);
 const normalizarDPI = (v) => v.replace(/\D/g, "").slice(0, 13);
 
+
+//Validacion de correo
+const CORREO_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const validarCorreo = (correo) => {
   const correoTrim = (correo || "").trim();
+
   if (!correoTrim) return "El correo es obligatorio";
-  if (correoTrim.length < 6 || correoTrim.length > 100) return "Debe tener entre 6 y 100 caracteres";
-  if (!CORREO_REGEX.test(correoTrim)) return "Formato de correo inválido";
+  
+  if (!CORREO_REGEX.test(correoTrim)) {
+    return "Formato de correo inválido";
+  }
 
-  const dominioCorreo = correoTrim.split("@")[1]?.toLowerCase() || "";
-  const dominioValido = DOMINIOS_VALIDOS.some((dom) =>
-    dominioCorreo === dom.replace("@", "").toLowerCase() ||
-    dominioCorreo.endsWith("." + dom.replace("@", "").toLowerCase())
-  );
-  if (!dominioValido) return "Dominio no permitido. Usa un correo válido.";
-
-  return null; // válido
+  return null; // ✅ válido
 };
 
 const validarEdadMinima = (fechaISO, minAnios = 13) => {
@@ -54,8 +45,10 @@ const validarEdadMinima = (fechaISO, minAnios = 13) => {
 };
 
 // ------------------------------------------------
-
+const { showLoading, closeLoading } = Procesando();
 function Formulario({ onClose }) {
+
+  
   const initialFormData = {
     nombre: "",
     apellido: "",
@@ -78,24 +71,19 @@ function Formulario({ onClose }) {
   const canvasRef = useRef(null);
 
   // Cargar membresías y limpiar recursos al desmontar
-  useEffect(() => {
-    axios
-      .get("https://Compiladores2025.somee.com/api/Clientes/listarmembresias")
-      .then((response) => {
-      console.log("Datos recibidos:", response.data); // 👈 imprime en consola
-      setMembresias(response.data);
-    })
-      .catch((error) => console.error("Error al obtener membresías:", error));
 
-    return () => {
-      if (videoRef.current?.srcObject) {
-        videoRef.current.srcObject.getTracks().forEach((t) => t.stop());
-      }
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
+  useEffect(() => {
+    const cargarMembresias = async () => {
+      try {
+        const data = await obtenerMembresias();
+        setMembresias(data);
+      } catch (error) {
+        alert("Error al extraer membresias");
       }
     };
-  }, [previewUrl]);
+
+    cargarMembresias(); // se ejecuta al montar el form
+  }, []);
 
   // ------------ onChange con validaciones por campo ------------
   const handleChange = (e) => {
@@ -127,7 +115,6 @@ function Formulario({ onClose }) {
     if (name === "dpi") {
       const dpi = normalizarDPI(value);
       setFormData((p) => ({ ...p, dpi }));
-      
       if (!cuiValido(dpi)) newErrors.dpi = "El DPI no es válido";
       else delete newErrors.dpi;
       setErrors(newErrors);
@@ -218,9 +205,11 @@ function Formulario({ onClose }) {
 
   // ------------ Submit ------------
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     if (!validate()) return;
-
+    onClose();
+    showLoading("Registro Usuarios", "Registrando");
     try {
       const cliente = {
         nombre: formData.nombre,
@@ -237,18 +226,19 @@ function Formulario({ onClose }) {
 
       const resultado = await insertarCliente(cliente);
       if (resultado?.success === 1) {
-        window.alert("✅ Cliente insertado con éxito");
+        closeLoading(true,"Registrado");
       } else {
-        window.alert("❌ Ocurrió un error al insertar el cliente");
+        closeLoading(false,"Ocurrió un error al insertar el cliente");
+        
       }
     } catch (err) {
       console.error(err);
-      window.alert("❌ Error inesperado al insertar el cliente");
+      closeLoading(false,"Error, intente mas tarde.");
     } finally {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       setFormData(initialFormData);
       setPreviewUrl(null);
-      onClose();
+      
     }
   };
 
