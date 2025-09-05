@@ -48,24 +48,24 @@ const Usuarios = () => {
             {clientes &&
               clientes
                 .filter((u) =>
-                  u.Nombre.toLowerCase().includes(search.toLowerCase())
+                  u.nombre.toLowerCase().includes(search.toLowerCase())
                 )
                 .map((user, idx) => (
                   <tr key={idx}>
-                    <td>{user.Nombre}</td>
-                    <td>{user.Numero_Identificacion}</td>
+                    <td>{user.nombre}</td>
+                    <td>{user.numero_Identificacion}</td>
                     <td
                       className={
-                        user.Estado_Membresia === "Vigente"
+                        user.estado_Membresia === "Vigente"
                           ? "status-vigente"
                           : "status-vencida"
                       }
                     >
-                      {user.Estado_Membresia}
+                      {user.estado_Membresia}
                     </td>
                     <td>
                       <button className="edit">Editar</button>
-                      {user.Estado_Membresia === "Vencida" ? (
+                      {user.estado_Membresia === "Vencida" ? (
                         <button className="renew">Renovar</button>
                       ) : (
                         <button className="delete">Eliminar</button>

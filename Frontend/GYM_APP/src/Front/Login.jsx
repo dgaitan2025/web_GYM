@@ -9,7 +9,7 @@ export default function Login() {
   const { showLoading, closeLoading } = Procesando();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");      // Usado para el campo "usuario"
-  const [password, setPassword] = useState("3BFB9F5A"); // Usado para "contraseña"
+  const [password, setPassword] = useState(""); // Usado para "contraseña"
   const [recordar, setRecordar] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
 

@@ -212,6 +212,8 @@ function Formulario({ onClose }) {
     showLoading("Registro Usuarios", "Registrando");
     try {
       const cliente = {
+
+        clientes:{
         nombre: formData.nombre,
         apellido: formData.apellido,
         telefono: formData.telefono,
@@ -222,13 +224,18 @@ function Formulario({ onClose }) {
         idMembresia: parseInt(formData.membresiaId, 10),
         idSucursal: 1,
         numero_Identificacion: formData.dpi
+        },
+        usuario:{
+          correo: formData.correo
+        }
+        
       };
 
       const resultado = await insertarCliente(cliente);
       if (resultado?.success === 1) {
         closeLoading(true,"Registrado");
       } else {
-        closeLoading(false,"Ocurrió un error al insertar el cliente");
+        closeLoading(false,resultado.mensaje);
         
       }
     } catch (err) {

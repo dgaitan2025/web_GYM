@@ -23,10 +23,7 @@ const Usuarios = () => {
           Añadir Empleado
         </button>
 
-        <FormRegEmpleado
-        open={showForm}
-        onClose={() => setShowForm(false)}
-      />
+        {showForm && <FormRegEmpleado onClose={() => setShowForm(false)} />}
       </header>
 
       <div className="search-box">
@@ -57,7 +54,7 @@ const Usuarios = () => {
                 .map((user, idx) => (
                   <tr key={idx}>
                     <td>{user.nombre}</td>
-                    <td>{user.telefono}</td>
+                    <td>{user.numero_Identificacion}</td>
                     <td>{user.sucursal}
                     </td>
                     <td>
