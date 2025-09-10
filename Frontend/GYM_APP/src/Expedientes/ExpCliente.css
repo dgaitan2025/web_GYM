@@ -1,0 +1,195 @@
+/* Contenedor principal */
+.exp-cliente-container {
+    width: 100%;
+    min-height: 400px; /* fuerza un tamaño suficiente para probar scroll */
+  box-sizing: border-box;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+/* HEADER */
+.exp-cliente-header {
+  background-color: #0d1d3a;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+.exp-cliente-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* PERFIL */
+.exp-cliente-profile {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.exp-profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.exp-profile-pic:hover {
+  border-color: #243fed;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.profile-info h3 {
+  font-size: 1.4rem;
+  margin: 0;
+  color: #111827;
+}
+
+.membership {
+  font-size: 0.95rem;
+  color: #243fed;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* DATOS PERSONALES */
+.exp-cliente-data {
+  background-color: #f9f9f9;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0 1.2rem 1.2rem;
+  margin: 0 1.5rem 1.5rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+}
+
+.exp-cliente-data.editing {
+  box-shadow: 0 0 15px rgba(36,63,237,0.2);
+}
+
+.exp-cliente-data h3 {
+  font-size: 1.35rem;
+  color: #111827;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.exp-cliente-data h3::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 2px;
+  background-color: #243fed;
+  margin-top: 0.3rem;
+  border-radius: 1px;
+}
+
+/* GRID DE CAMPOS */
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.field label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.field p {
+  color: #111827;
+  margin: 0;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  outline: none;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  color: #111827;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field input:focus {
+  border-color: #243fed;
+  box-shadow: 0 0 0 3px rgba(36,63,237,0.2);
+}
+
+/* BOTONES */
+.exp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.btn.edit { background-color: #243fed; color: white; }
+.btn.edit:hover {
+  background-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(36,63,237,0.3);
+  transform: translateY(-2px);
+}
+
+.btn.save { background-color: #3b82f6; color: white; }
+.btn.save:hover {
+  background-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(36,98,246,0.3);
+  transform: translateY(-2px);
+}
+
+.btn.cancel { background-color: #e5e7eb; color: #111827; }
+.btn.cancel:hover {
+  background-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* ESTADOS */
+.exp-loading, .exp-error {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin: 2rem 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .exp-cliente-profile { flex-direction: column; text-align: center; }
+  .exp-profile-pic { width: 90px; height: 90px; }
+  .profile-info h3 { font-size: 1.3rem; }
+  .data-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+  .btn { font-size: 0.9rem; padding: 0.45rem 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .exp-profile-pic { width: 80px; height: 80px; }
+  .profile-info h3 { font-size: 1.2rem; }
+  .btn { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+}

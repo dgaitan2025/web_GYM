@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import FormRegUsuario from '../Formularios/FormRegUsuario'; // Asegúrate que esta ruta sea correcta
 import "./VistaUsuarios.css"
 import { obtenerClientes } from "../Funciones/IndexClientes";
+import ExpCliente from "../Expedientes/ExpCliente"; // Cambio Agregado Exp
 const Usuarios = () => {
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
   const [clientes, setClientes] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null); // Cambio Agregado Exp
 
   useEffect(() => {
     obtenerClientes()
@@ -64,7 +66,10 @@ const Usuarios = () => {
                       {user.estado_Membresia}
                     </td>
                     <td>
-                      <button className="edit">Editar</button>
+                      {/*<button className="edit">Editar</button>*/}
+                      <button className="edit" onClick={() => setSelectedUserId(user.id_Cliente)}>
+                        Editar
+                      </button>
                       {user.estado_Membresia === "Vencida" ? (
                         <button className="renew">Renovar</button>
                       ) : (
@@ -76,6 +81,19 @@ const Usuarios = () => {
           </tbody>
         </table>
       </div>
+      {/* Cambios para modal de expediente */}
+        {selectedUserId !== null && (
+  <div className="modal-overlay" onClick={() => setSelectedUserId(null)}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <ExpCliente userId={selectedUserId} />
+      <button className="close-exp" onClick={() => setSelectedUserId(null)}>
+        &times;
+      </button>
+    </div>
+  </div>
+)}
+
+      
     </main>
   );
 };

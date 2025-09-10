@@ -142,3 +142,72 @@ tr:hover {
     width: 100%;
   }
 }
+
+/* Aqui estan los cambios implementados para agregar el Modal del Expediente */
+/* ✅ Se agregó para el modal de ExpCliente */
+
+/* overlay que cubre toda la pantalla */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 0;
+  z-index: 1000;
+  overflow-y: auto; /* evita que el body haga scroll mientras el modal está abierto */
+}
+
+/* contenedor centrado del modal */
+.modal-content {
+min-height: 750px;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 90%;       /* ancho máximo del modal */
+  width: 1000px;
+  max-height: 90vh;     /* usa 90% de la altura de la ventana */
+  overflow-y: auto;     /* scroll vertical si el contenido es más alto */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  scrollbar-gutter: stable;
+}
+
+/* Ajuste para dispositivos pequeños */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 85vh; 
+    padding: 1rem;
+  }
+}
+
+
+
+.close-exp {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #111827;
+  z-index: 10; /* siempre arriba del scroll */
+}
+
+.close-exp:hover {
+  color: #243fed;
+}
+
+
+
+
+
