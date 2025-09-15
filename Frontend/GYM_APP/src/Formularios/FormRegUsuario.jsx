@@ -22,7 +22,7 @@ const validarCorreo = (correo) => {
   const correoTrim = (correo || "").trim();
 
   if (!correoTrim) return "El correo es obligatorio";
-  
+
   if (!CORREO_REGEX.test(correoTrim)) {
     return "Formato de correo inválido";
   }
@@ -48,7 +48,7 @@ const validarEdadMinima = (fechaISO, minAnios = 13) => {
 const { showLoading, closeLoading } = Procesando();
 function Formulario({ onClose }) {
 
-  
+
   const initialFormData = {
     nombre: "",
     apellido: "",
@@ -115,8 +115,9 @@ function Formulario({ onClose }) {
     if (name === "dpi") {
       const dpi = normalizarDPI(value);
       setFormData((p) => ({ ...p, dpi }));
-      if (!cuiValido(dpi)) newErrors.dpi = "El DPI no es válido";
-      else delete newErrors.dpi;
+      const respuesta = cuiValido(dpi)
+      if (!respuesta.valido) newErrors.dpi = { tipo: "error", mensaje: "El DPI no es válido" };
+      else newErrors.dpi = { tipo: "ok", mensaje: `Departamento: ${respuesta.departamento}, Municipio: ${respuesta.municipio}` };
       setErrors(newErrors);
       return;
     }
@@ -183,7 +184,7 @@ function Formulario({ onClose }) {
     // DPIf
     const dpi = (formData.dpi || "").trim();
     if (!dpi) newErrors.dpi = "El DPI es obligatorio";
-    
+
     else if (!cuiValido(dpi)) newErrors.dpi = "El DPI no es válido";
 
     // Fecha
@@ -205,7 +206,7 @@ function Formulario({ onClose }) {
 
   // ------------ Submit ------------
   const handleSubmit = async (e) => {
-    
+
     e.preventDefault();
     if (!validate()) return;
     onClose();
@@ -213,39 +214,39 @@ function Formulario({ onClose }) {
     try {
       const cliente = {
 
-        clientes:{
-        nombre: formData.nombre,
-        apellido: formData.apellido,
-        telefono: formData.telefono,
-        fechaNacimiento: formData.fechaNacimiento,
-        foto: formData.foto64,          // usamos la foto en Base64 si fue tomada
-        correo: formData.correo,
-        idTipoUsuario: 4,
-        idMembresia: parseInt(formData.membresiaId, 10),
-        idSucursal: 1,
-        numero_Identificacion: formData.dpi
+        clientes: {
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          telefono: formData.telefono,
+          fechaNacimiento: formData.fechaNacimiento,
+          foto: formData.foto64,          // usamos la foto en Base64 si fue tomada
+          correo: formData.correo,
+          idTipoUsuario: 4,
+          idMembresia: parseInt(formData.membresiaId, 10),
+          idSucursal: 1,
+          numero_Identificacion: formData.dpi
         },
-        usuario:{
+        usuario: {
           correo: formData.correo
         }
-        
+
       };
 
       const resultado = await insertarCliente(cliente);
       if (resultado?.success === 1) {
-        closeLoading(true,"Registrado");
+        closeLoading(true, "Registrado");
       } else {
-        closeLoading(false,resultado.mensaje);
-        
+        closeLoading(false, resultado.mensaje);
+
       }
     } catch (err) {
       console.error(err);
-      closeLoading(false,"Error, intente mas tarde.");
+      closeLoading(false, "Error, intente mas tarde.");
     } finally {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       setFormData(initialFormData);
       setPreviewUrl(null);
-      
+
     }
   };
 
@@ -360,7 +361,11 @@ function Formulario({ onClose }) {
                   onChange={handleChange}
                   required
                 />
-                {errors.dpi && <p className="error">{errors.dpi}</p>}
+                {errors.dpi && (
+                  <p className={errors.dpi.tipo === "error" ? "error" : "success"}>
+                    {errors.dpi.mensaje}
+                  </p>
+                )}
               </div>
 
               <div>

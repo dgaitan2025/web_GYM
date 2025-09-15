@@ -2,11 +2,15 @@
  * @param {string} cui - número de DPI
  * @returns {boolean} true para CUI válido y false para CUI no válido
  */
+import {depMuni} from "./DepMuni"
+
 export const cuiValido = (cui) => {
+  
+
   if (!cui) return false;
 
   const cuiRegExp = /^[0-9]{4}\s?[0-9]{5}\s?[0-9]{4}$/;
-  if (!cuiRegExp.test(cui)) return false;
+  if (!cuiRegExp.test(cui)) return { valido: false, departamento: null, municipio: null };
 
   // elimina TODOS los espacios (antes quitabas solo el primero)
   cui = cui.replace(/\s/g, "");
@@ -20,9 +24,9 @@ export const cuiValido = (cui) => {
     17, 8, 16, 16, 13, 14, 19, 8, 24, 21, 9, 30, 32, 21, 8, 17, 14, 5, 11, 11, 7, 17,
   ];
 
-  if (depto === 0 || muni === 0) return false;
-  if (depto > munisPorDepto.length) return false;
-  if (muni > munisPorDepto[depto - 1]) return false;
+  if (depto === 0 || muni === 0) return { valido: false, departamento: null, municipio: null };
+  if (depto > munisPorDepto.length) return { valido: false, departamento: null, municipio: null };
+  if (muni > munisPorDepto[depto - 1]) return { valido: false, departamento: null, municipio: null };
 
   // Algoritmo complemento 11
   let total = 0;
@@ -30,7 +34,12 @@ export const cuiValido = (cui) => {
     total += Number(numero[i]) * (i + 2);
   }
   const modulo = total % 11;
-  return modulo === verificador;
+  const valido = modulo === verificador;
+
+  const departamento = depMuni [depto - 1]?.nombre || null;
+  const municipio = depMuni [depto - 1]?.municipios[muni - 1] || null;
+
+  return { valido, departamento, municipio};
 };
 
 /**

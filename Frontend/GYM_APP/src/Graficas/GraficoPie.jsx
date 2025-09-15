@@ -1,22 +1,67 @@
 import { ResponsivePie } from '@nivo/pie';
+import React, { useEffect, useState } from "react";
+import {obtenerClienteMembresias} from "../Funciones/DashServices"
 
-const data = [
-  { id: "ventas", label: "Ventas", value: 400 },
-  { id: "marketing", label: "Marketing", value: 300 },
-  { id: "soporte", label: "Soporte", value: 200 },
-  { id: "desarrollo", label: "Desarrollo", value: 450 },
+/*
+const rawData = [
+  {
+    clientes_Activos: 5,
+    clientes_con_Membresia_Vigente: 3
+  }
 ];
 
-
-
-
-
+const data = [
+  {
+    id: "Clientes Activos",
+    label: "Clientes Activos",
+    value: rawData[0].clientes_Activos
+  },
+  {
+    id: "Clientes con Membresía Vigente",
+    label: "Clientes con Membresía Vigente",
+    value: rawData[0].clientes_con_Membresia_Vigente
+  }
+];*/
 
 const GraficoPie = () => {
+    const [data, setData] = useState([]);
 
-   return (
-    <div style={{ height: 400, alignItems:100, position:"center" }}>
-      <h1>Data</h1>
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const respuesta = await obtenerClienteMembresias();
+
+        // ⚡ transforma el JSON al formato que necesita Nivo Pie
+        if (respuesta && respuesta.length > 0) {
+          const raw = respuesta[0];
+          const datosTransformados = [
+            {
+              id: "Clientes Activos",
+              label: "Clientes Activos",
+              value: raw.clientes_Activos
+            },
+            {
+              id: "Clientes con Membresía Vigente",
+              label: "Clientes con Membresía Vigente",
+              value: raw.clientes_con_Membresia_Vigente
+            }
+          ] //.filter(item => item.value > 0); // 👈 opcional: eliminar valores 0
+
+          setData(datosTransformados);
+          
+        }
+      } catch (error) {
+        console.error("Error cargando datos del gráfico:", error);
+      }
+    };
+
+    cargarDatos();
+  }, []);
+
+
+  return (
+    <div style={{ height: 400 }}>
+      <h2>Clientes</h2>
       <ResponsivePie
         data={data}
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
@@ -32,6 +77,19 @@ const GraficoPie = () => {
         arcLinkLabelsColor={{ from: 'color' }}
         arcLabelsSkipAngle={10}
         arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
+         legends={[
+            {
+                 anchor: 'bottom',
+                direction: 'column',
+                translateX: -200,
+                translateY: 64,
+                itemWidth: 100,
+                itemHeight: 18,
+                symbolShape: 'circle'
+            }
+        ]}
+
+        
       />
     </div>
   );
