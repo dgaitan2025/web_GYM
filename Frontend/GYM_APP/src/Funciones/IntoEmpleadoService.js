@@ -1,13 +1,11 @@
-//API para la insertar clientes 
 
-
-const URL = 'https://Compiladores2025.somee.com/api/empleadoes/EmpleadosCrear';
+import {UrlWithApi, ENDPOINTS} from "../Service/apiConfig"
 
 export const insertarEmpleado = async (clienteData) => {
    
   try {
     
-    const response = await fetch(URL, {
+    const response = await fetch(UrlWithApi(ENDPOINTS.insertEmpleado), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

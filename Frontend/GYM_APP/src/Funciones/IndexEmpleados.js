@@ -1,9 +1,9 @@
-// apiEmpleado.js
+import {UrlWithApi, ENDPOINTS} from "../Service/apiConfig"
+
 export async function obtenerEmpleados() {
-  const url = "https://Compiladores2025.somee.com/api/Empleadoes/EmpleadosIndex";
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(UrlWithApi(ENDPOINTS.indexEmpleados), {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

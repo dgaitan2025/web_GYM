@@ -8,6 +8,7 @@ import DashContent from "./Graficas/DashContent";
 import VistaUsuarios from "./Vistas/VistaUsuarios";
 import VistaEmpleados from "./Vistas/VistaEmpleados";
 import VistaEnConstruccion from "./Vistas/VistaEnConstruccion";
+import VistaRutinas from "./Vistas/VistaRutinas"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import VistaDashAdmin from "./Vistas/VistaDashAdmin"
@@ -33,6 +34,7 @@ function App() {
             
           <Route path="VistaUsuarios" element={<RequireRole roles={[1,2]}><VistaUsuarios/></RequireRole>}/>
           <Route path="VistaEmpleados" element={<RequireRole roles={[1,2]}><VistaEmpleados /></RequireRole>}/>
+          <Route path="VistaRutinas" element={<RequireRole roles={[3]}><VistaRutinas /></RequireRole>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>

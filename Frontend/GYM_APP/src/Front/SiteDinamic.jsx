@@ -22,7 +22,7 @@ export default function SiteDinamic() {
     { path: "/sitedinamic/EnConstruccion", label: "Renovar Membresía", roles: [1,2] },
     { path: "/sitedinamic/EnConstruccion", label: "Reportes", roles: [1,2] },
     { path: "/sitedinamic/EnConstruccion", label: "Asignar rutinas", roles: [3] },
-    { path: "/sitedinamic/EnConstruccion", label: "Crear Rutina", roles: [3] },
+    { path: "/sitedinamic/VistaRutinas", label: "Rutina", roles: [3] },
     { path: "/sitedinamic/EnConstruccion", label: "Historial de rutinas", roles: [3] },
     
   ];

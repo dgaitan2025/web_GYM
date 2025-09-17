@@ -1,7 +1,7 @@
 /* Contenedor principal */
 .exp-cliente-container {
-    width: 100%;
-    min-height: 400px; /* fuerza un tamaño suficiente para probar scroll */
+  width: 100%;
+  max-height: 90vh;
   box-sizing: border-box;
   max-width: 1000px;
   margin: 0 auto;
@@ -10,7 +10,7 @@
   border-radius: 1.2rem;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow: hidden;
+  overflow: auto;     /* 🔥 deja crecer según los hijos */
 }
 
 /* HEADER */
@@ -138,7 +138,9 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin: 0 1.5rem 1.5rem 1.5rem;
+  
+  margin-top: auto;       /* empuja hacia abajo */
+  padding: 1rem;
 }
 
 .btn {
@@ -179,17 +181,18 @@
   margin: 2rem 0;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .exp-cliente-profile { flex-direction: column; text-align: center; }
-  .exp-profile-pic { width: 90px; height: 90px; }
-  .profile-info h3 { font-size: 1.3rem; }
-  .data-grid { grid-template-columns: 1fr; gap: 0.8rem; }
-  .btn { font-size: 0.9rem; padding: 0.45rem 0.9rem; }
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center; /* centra vertical */
 }
 
-@media (max-width: 480px) {
-  .exp-profile-pic { width: 80px; height: 80px; }
-  .profile-info h3 { font-size: 1.2rem; }
-  .btn { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+.modal-content {
+  display: inline-block;  /* 🔥 se adapta al contenido */
 }

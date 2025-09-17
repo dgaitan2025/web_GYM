@@ -1,11 +1,11 @@
-import CryptoJS from "crypto-js";
 import {encryptString} from "./Encriptar"
 import { Procesando } from "../Componente/Espera";
+import {UrlWithApi, ENDPOINTS} from "../Service/apiConfig"
 
 export async function login(credenciales) {
     const { showLoading, closeLoading } = Procesando();
     
-    const respuesta = await fetch("https://Compiladores2025.somee.com/api/Login/login", {
+    const respuesta = await fetch(UrlWithApi(ENDPOINTS.login), {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

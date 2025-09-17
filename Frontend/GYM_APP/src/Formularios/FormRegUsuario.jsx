@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Front/SiteDinamic";
 import "./FormRegUsuario.css";
-import { cuiValido, nitValido } from "../Funciones/validaDPI.js";
+import { cuiValido} from "../Funciones/validaDPI.js";
 import { insertarCliente } from "../Funciones/IntoClienteService";
 import { createPortal } from "react-dom";
 import { Procesando } from "../Componente/Espera";
-import { obtenerMembresias } from "../Funciones/Membresias.js";
+import { cargarMembresias } from "../Funciones/Membresias.js";
 
 const SOLO_LETRAS_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
@@ -47,6 +47,7 @@ const validarEdadMinima = (fechaISO, minAnios = 13) => {
 // ------------------------------------------------
 const { showLoading, closeLoading } = Procesando();
 function Formulario({ onClose }) {
+  const {membresias} = cargarMembresias();
 
 
   const initialFormData = {
@@ -65,25 +66,11 @@ function Formulario({ onClose }) {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [errors, setErrors] = useState({});
-  const [membresias, setMembresias] = useState([]);
+  
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Cargar membresías y limpiar recursos al desmontar
-
-  useEffect(() => {
-    const cargarMembresias = async () => {
-      try {
-        const data = await obtenerMembresias();
-        setMembresias(data);
-      } catch (error) {
-        alert("Error al extraer membresias");
-      }
-    };
-
-    cargarMembresias(); // se ejecuta al montar el form
-  }, []);
 
   // ------------ onChange con validaciones por campo ------------
   const handleChange = (e) => {
@@ -198,6 +185,10 @@ function Formulario({ onClose }) {
     // Membresía
     if (!String(formData.membresiaId || "").trim()) {
       newErrors.membresiaId = "El ID de membresía es obligatorio";
+    }
+
+    if(formData.foto64 ===""){
+      newErrors.photo = "debe de tomar fotografia"
     }
 
     setErrors(newErrors);
@@ -412,6 +403,7 @@ function Formulario({ onClose }) {
 
               <div>
                 <label>Foto:</label>
+                {errors.photo && <p className="error">{errors.photo}</p>}
                 <button type="button" className="boton-camara" onClick={abrirCamara}>Usar Cámara</button>
               </div>
 

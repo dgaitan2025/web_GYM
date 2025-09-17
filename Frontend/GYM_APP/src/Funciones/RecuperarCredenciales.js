@@ -1,5 +1,8 @@
+//Recuperar Clave
+import {UrlWithApi, ENDPOINTS} from "../Service/apiConfig"
+
 export async function recuperarClave(correo) {
-  const respuesta = await fetch("https://Compiladores2025.somee.com/api/Login/RecuperarContraseña", {
+  const respuesta = await fetch(UrlWithApi(ENDPOINTS.recuperarClave), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

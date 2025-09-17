@@ -1,11 +1,11 @@
 // apiEmpleado.js
-const clientesMembresias = "https://Compiladores2025.somee.com/api/DashBoard/ClientesTotales_Y_PorMembresia";
+import {UrlWithApi, ENDPOINTS} from "../Service/apiConfig"
 
 export async function obtenerClienteMembresias() {
   
 
   try {
-    const response = await fetch(clientesMembresias, {
+    const response = await fetch(UrlWithApi(ENDPOINTS.DasboarAdmin), {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

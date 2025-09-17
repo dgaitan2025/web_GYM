@@ -1,9 +1,8 @@
-// apiEmpleado.js
-export async function obtenerClientes() {
-  const url = "https://Compiladores2025.somee.com/api/Clientes/ClientesIndex";
+import {UrlWithApi, ENDPOINTS} from "../Service/apiConfig"
 
+export async function obtenerClientes() {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(UrlWithApi(ENDPOINTS.indexClientes), {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
