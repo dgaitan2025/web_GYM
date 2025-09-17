@@ -13,38 +13,37 @@ const Field = ({ label, name, value, onChange, isEditing, readOnly }) => (
   </div>
 );
 
-const ExpCliente = ({ userId }) => {
-  const [userData, setUserData] = useState(null); // Datos obtenidos de la API
+const ExpEmpleado = ({ empleadoId }) => {
+  const [empleadoData, setEmpleadoData] = useState(null); // Datos obtenidos de la API
   const [formData, setFormData] = useState({});   // Datos para edición
   const [isEditing, setIsEditing] = useState(false); // Control del modo edición
 
-  const membershipNames = { 1: "Básica", 2: "Estándar", 3: "Premium", 7: "VIP" };
-  const userTypeNames = { 1: "Cliente", 2: "Administrador", 3: "Instructor" };
   const branchNames = { 1: "Sucursal Centro", 2: "Sucursal Norte", 3: "Sucursal Sur" };
+  const roleNames = { 1: "Administrador", 2: "Instructor", 3: "Recepcionista" };
 
   useEffect(() => {
-    if (!userId) return; // Si no hay userId, no hace nada
+    if (!empleadoId) return; // Si no hay empleadoId, no hace nada
 
-    axios.get(`/api/users/${userId}`)
+    axios.get(`/api/empleados/${empleadoId}`)
       .then(res => {
         if (res.data) {
-          setUserData(res.data); // Guardar datos reales
+          setEmpleadoData(res.data); // Guardar datos reales
           setFormData(res.data); // Inicializar formulario editable
         }
       })
       .catch(() => {
         // Si hay error de conexión, no se muestra mensaje, solo deja campos vacíos
-        setUserData(null);
+        setEmpleadoData(null);
         setFormData({});
       });
-  }, [userId]);
+  }, [empleadoId]);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = () => {
-    axios.put(`/api/users/${userId}`, formData)
+    axios.put(`/api/empleados/${empleadoId}`, formData)
       .then(res => {
-        setUserData(res.data);
+        setEmpleadoData(res.data);
         setIsEditing(false); // Sale del modo edición
       })
       .catch(() => {
@@ -52,16 +51,16 @@ const ExpCliente = ({ userId }) => {
       });
   };
 
-  const fields = [
+   const fields = [
     { label: "Nombre", name: "nombre" },
     { label: "Apellido", name: "apellido" },
     { label: "Teléfono", name: "telefono" },
-    { label: "Fecha de Nacimiento", name: "fechaNacimiento" },
     { label: "Correo", name: "correo" },
-    { label: "Número de Identificación", name: "numero_Identificacion" },
-    { label: "Tipo de Usuario", name: "idTipoUsuario", readOnly: true },
+    { label: "Rol", name: "idRol", readOnly: true },
     { label: "Sucursal", name: "idSucursal", readOnly: true },
   ];
+
+
 
   return (
     <div className="exp-cliente-container">
@@ -73,27 +72,27 @@ const ExpCliente = ({ userId }) => {
       {/* FOTO Y MEMBRESÍA */}
       <div className="exp-cliente-profile">
         <img
-          src={userData?.foto || "/default-avatar.png"} // Foto de usuario o default
-          alt={`${userData?.nombre || ""} ${userData?.apellido || ""}`}
+          src={empleadoData?.foto || "/default-avatar.png"} // Foto de usuario o default
+          alt={`${empleadoData?.nombre || ""} ${empleadoData?.apellido || ""}`}
           className="exp-profile-pic"
         />
         <div className="profile-info">
-          <h3>{userData?.nombre || "Nombre"} {userData?.apellido || "Apellido"}</h3>
+          <h3>{empleadoData?.nombre || "Nombre"} {empleadoData?.apellido || "Apellido"}</h3>
           <span className="membership">
-            {membershipNames[userData?.idMembresia] || "Sin membresía"}
+            {roleNames[empleadoData?.idRol] || "Sin rol asignado"}
           </span>
         </div>
       </div>
 
       {/* DATOS PERSONALES */}
       <div className={`exp-cliente-data ${isEditing ? "editing" : ""}`}>
-        <h3>Datos Personales</h3>
+        <h3>Datos del Empleado</h3>
         <div className="data-grid">
           {fields.map(field => {
-            let value = formData[field.name] || userData?.[field.name];
+            let value = formData[field.name] || empleadoData?.[field.name];
 
             // Convertir IDs a nombres legibles
-            if (field.name === "idTipoUsuario") value = userTypeNames[value] || "";
+            if (field.name === "idRol") value = roleNames[value] || "";
             if (field.name === "idSucursal") value = branchNames[value] || "";
 
             return (
@@ -126,4 +125,4 @@ const ExpCliente = ({ userId }) => {
   );
 };
 
-export default ExpCliente;
+export default ExpEmpleado;

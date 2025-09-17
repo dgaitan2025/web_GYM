@@ -83,8 +83,8 @@ const Usuarios = () => {
       </div>
       {/* Cambios para modal de expediente */}
         {selectedUserId !== null && (
-  <div className="modal-overlay" onClick={() => setSelectedUserId(null)}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+  <div className="modal2-overlay" onClick={() => setSelectedUserId(null)}>
+    <div className="modal2-content" onClick={(e) => e.stopPropagation()}>
       <ExpCliente userId={selectedUserId} />
       <button className="close-exp" onClick={() => setSelectedUserId(null)}>
         &times;
