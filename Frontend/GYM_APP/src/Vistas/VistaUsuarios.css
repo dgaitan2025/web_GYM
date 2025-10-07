@@ -147,7 +147,7 @@ tr:hover {
 /* ✅ Se agregó para el modal de ExpCliente */
 
 /* overlay que cubre toda la pantalla */
-.modal-overlay {
+.modal2-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -163,7 +163,7 @@ tr:hover {
 }
 
 /* contenedor centrado del modal */
-.modal-content {
+.modal2-content {
 min-height: 750px;
   background-color: #fff;
   padding: 2rem;
@@ -181,7 +181,7 @@ min-height: 750px;
 
 /* Ajuste para dispositivos pequeños */
 @media (max-width: 768px) {
-  .modal-content {
+  .modal2-content {
     width: 95%;
     max-height: 85vh; 
     padding: 1rem;
@@ -208,6 +208,25 @@ min-height: 750px;
 }
 
 
+/* VistaUsuarios.css */
+.modal3-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100; /* puedes darle un z-index mayor que modal2 si quieres que siempre quede encima */
+}
 
-
-
+.modal3-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 1000px;
+  width: 100%;
+  position: relative;
+}
