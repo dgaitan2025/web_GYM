@@ -11,6 +11,7 @@ export const ENDPOINTS = {
   optenerGrupoMuscular: (id) => `/api/GrupoMusculares/${id}`,
   actualizarGrupoMuscular: "/api/GrupoMusculares/Actualizar",
   elimindarGrupoMuscular:"/api/GrupoMusculares/Eliminar",
+  insertarGrupoMuscular: "/api/GrupoMusculares/Crear",
 
   //Ricardo
   listarMembresias:"/api/Clientes/listarmembresias",

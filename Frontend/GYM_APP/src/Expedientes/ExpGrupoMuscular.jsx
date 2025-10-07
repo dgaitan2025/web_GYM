@@ -2,15 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ExpCliente.css";
 import { UrlWithApiDG, ENDPOINTS } from "../Service/apiConfig"
-/* ================================
-   Componente Field
-   ----------------
-   - Representa un campo del formulario de datos personales.
-   - Si está en modo edición (isEditing) y no es de solo lectura (readOnly),
-     se muestra un input editable.
-   - Si no, se muestra un <p> con el valor actual.
-   - El placeholder "..." se usa si el campo está vacío.
-================================ */
+import Swal from "sweetalert2";
+import { Procesando } from "../Componente/Espera";
+
+const { showLoading, closeLoading } = Procesando();
+
 const Field = ({ label, name, value, onChange, isEditing, readOnly }) => (
   <div className="field">
     <label>{label}</label>
@@ -22,18 +18,9 @@ const Field = ({ label, name, value, onChange, isEditing, readOnly }) => (
   </div>
 );
 
-/* ================================
-   Componente principal: ExpCliente
-   ----------------
-   Props:
-   - userId: ID del usuario que se quiere mostrar.
-   
-   Estado:
-   - userData: almacena los datos reales del usuario desde backend.
-   - formData: almacena los datos editables para edición de formulario.
-   - isEditing: controla si se está en modo edición.
-================================ */
-const ExpCliente = ({ userId }) => {
+
+
+const ExpCliente = ({ userId, onClose }) => {
   const [userData, setUserData] = useState(null); // Datos obtenidos de la API
   const [formData, setFormData] = useState({});   // Datos para edición
   const [isEditing, setIsEditing] = useState(false); // Control del modo edición
@@ -58,34 +45,49 @@ const ExpCliente = ({ userId }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = () => {
-    axios.post(UrlWithApiDG(ENDPOINTS.actualizarGrupoMuscular), formData)
-      .then(res => {
-        setUserData(res.data);   // refresca datos con la respuesta
-        setIsEditing(false);     // sale del modo edición
-      })
-      .catch((err) => {
-        console.error("Error al actualizar grupo muscular:", err);
-      });
+  const handleSubmit = async () => {
+    onClose();
+
+    showLoading("Modificando", "Procesando");
+    try {
+      const { nombre, descripcion } = formData;
+
+      if (!nombre?.trim() || !descripcion?.trim()) {
+        closeLoading(false, "Campo Vacio");
+        return;
+      }
+
+      const response = await axios.post(UrlWithApiDG(ENDPOINTS.actualizarGrupoMuscular), formData)
+
+      const data = response.data;
+      console.log(data)
+
+      if (data.success) {
+        // ✅ Éxito: mostrar mensaje y refrescar
+        closeLoading(true, data.mensaje);
+
+        // 🔁 Refrescar lista después de 1.5 segundos
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        // ⚠ Error controlado desde el backend
+        closeLoading(false, data.mensaje);
+      }
+
+    } catch (err) {
+
+      closeLoading(false, "Error al conectarse al Servidor");
+
+    }
   };
 
-  /* ================================
-     Campos a mostrar en la UI
-     ----------------
-     - Algunos campos son de solo lectura (readOnly)
-     - Otros se pueden editar
-  ================================= */
   const fields = [
     { label: "Nombre", name: "nombre" },
     { label: "Descripcion", name: "descripcion" },
 
   ];
 
-  /* ================================
-     Render principal
-     - Siempre se renderiza la UI aunque userData sea null
-     - Los campos vacíos muestran placeholders o "—"
-  ================================= */
   return (
     <div className="exp-cliente-container">
       {/* HEADER */}
@@ -99,7 +101,7 @@ const ExpCliente = ({ userId }) => {
         <h3>Datos</h3>
         <div className="data-grid">
           {fields.map(field => {
-            let value = formData[field.name] || userData?.[field.name];
+            let value = formData[field.name] ?? userData?.[field.name] ?? "";
 
             return (
               <Field

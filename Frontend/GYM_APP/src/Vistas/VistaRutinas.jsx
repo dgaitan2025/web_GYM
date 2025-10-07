@@ -1,28 +1,48 @@
 // src/components/Usuarios.jsx
 import React, { useState, useEffect } from 'react';
-import FormRegUsuario from '../Formularios/FormRegUsuario'; // Asegúrate que esta ruta sea correcta
+import FormRegUsuario from '../Formularios/FormRegRutina'; // Asegúrate que esta ruta sea correcta
 import "./VistaRutinas.css"
-import { obtenerClientes } from "../Funciones/IndexClientes";
 import ExpGrupoMuscular from "../Expedientes/ExpGrupoMuscular"; // Cambio Agregado Exp
 import { useGrupoMuscular } from "../Funciones/Api_grupo_muscular"
 import axios from "axios";
 import { UrlWithApiDG, ENDPOINTS } from "../Service/apiConfig"
+import { Procesando } from "../Componente/Espera.jsx";
+
+const { showLoading, closeLoading } = Procesando();
+
 const Usuarios = () => {
     const [showForm, setShowForm] = useState(false);
     const [search, setSearch] = useState("");
     const [selectedUserId, setSelectedUserId] = useState(null); // Cambio Agregado Exp
     const { grupoMuscular } = useGrupoMuscular();
 
-    const handleSubmit = (id) => {
-        axios.post(UrlWithApiDG(ENDPOINTS.elimindarGrupoMuscular), { id_Grupo: id })
-            .then(() => {
-                console.log("Grupo muscular eliminado/actualizado correctamente");
-                // 🔥 Aquí puedes refrescar la lista si quieres
-                // getGrupoMuscular().then(data => setgrupoMuscular(data));
-            })
-            .catch((err) => {
-                console.error("Error al actualizar grupo muscular:", err);
-            });
+    const handleSubmit = async (id) => {
+        showLoading("Eliminando Grupo Muscular", "Eliminando");
+        try {
+            // 🔄 Llamada a la API
+            const response = await axios.post(
+                UrlWithApiDG(ENDPOINTS.elimindarGrupoMuscular),
+                { id_Grupo: id }
+            );
+
+            const data = response.data; // <- { success: true, mensaje: "Eliminado correctamente" }
+
+            if (data.success) {
+                // ✅ Éxito: mostrar mensaje y refrescar
+                closeLoading(true, data.mensaje);
+
+                // 🔁 Refrescar lista después de 1.5 segundos
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                // ⚠ Error controlado desde el backend
+                closeLoading(false, data.mensaje);
+            }
+        } catch (err) {
+            console.error("Error al eliminar grupo muscular:", err);
+            closeLoading(false, "Error al conectarse al Servidor");
+        }
     };
 
     return (
@@ -42,7 +62,7 @@ const Usuarios = () => {
             <div className="search-box">
                 <input
                     type="text"
-                    placeholder="Buscar..."
+                    placeholder="Buscar nombre..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
@@ -85,7 +105,7 @@ const Usuarios = () => {
             {selectedUserId !== null && (
                 <div className="modal-overlay" onClick={() => setSelectedUserId(null)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <ExpGrupoMuscular userId={selectedUserId} />
+                        <ExpGrupoMuscular userId={selectedUserId} onClose={() => setSelectedUserId(null)} />
                         <button className="close-exp" onClick={() => setSelectedUserId(null)}>
                             &times;
                         </button>

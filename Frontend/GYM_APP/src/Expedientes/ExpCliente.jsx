@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ExpCliente.css";
 
+
+
+
+
 /* ================================
    Componente Field
    ----------------
@@ -21,6 +25,8 @@ const Field = ({ label, name, value, onChange, isEditing, readOnly }) => (
     )}
   </div>
 );
+
+
 
 /* ================================
    Componente principal: ExpCliente
