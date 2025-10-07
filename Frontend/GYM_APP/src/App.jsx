@@ -12,6 +12,7 @@ import VistaRutinas from "./Vistas/VistaRutinas"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import VistaDashAdmin from "./Vistas/VistaDashAdmin"
+import VistaAsistencia from "./Vistas/VistaAsistencia"
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="VistaUsuarios" element={<RequireRole roles={[1,2]}><VistaUsuarios/></RequireRole>}/>
           <Route path="VistaEmpleados" element={<RequireRole roles={[1,2]}><VistaEmpleados /></RequireRole>}/>
           <Route path="VistaRutinas" element={<RequireRole roles={[3]}><VistaRutinas /></RequireRole>}/>
+          <Route path="VistaAsistencia" element={<RequireRole roles={[2]}><VistaAsistencia/></RequireRole>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>
