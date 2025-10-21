@@ -21,10 +21,10 @@ export default function SiteDinamic() {
     { path: "/sitedinamic/VistaEmpleados", label: "Registrar Empleados", roles: [1] },
     { path: "/sitedinamic/EnConstruccion", label: "Renovar Membresía", roles: [] },
     { path: "/sitedinamic/EnConstruccion", label: "Reportes", roles: [1,2] },
-    { path: "/sitedinamic/EnConstruccion", label: "Asignar rutinas", roles: [3] },
+    { path: "/sitedinamic/VistaAsigRutinaCliente", label: "Asignar rutinas", roles: [3] },
     { path: "/sitedinamic/VistaAsigRutina", label: "Gestionar rutinas", roles: [3] },
     { path: "/sitedinamic/VistaRutinas", label: "Gestionar grupo muscular", roles: [3] },
-    { path: "/sitedinamic/EnConstruccion", label: "Historial de rutinas", roles: [3] },
+    { path: "/sitedinamic/EnConstruccion", label: "Historial de rutinas", roles: [40] },
     
   ];
 

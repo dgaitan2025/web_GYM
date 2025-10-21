@@ -17,6 +17,7 @@ export const ENDPOINTS = {
   obtenerRutina: (id) => `/api/Rutinas/${id}`,
   actualizarRutina: "/api/Rutinas/Actualizar",
   eliminarRutina:"/api/Rutinas/Eliminar",
+  rutinasPorGrupo:"/api/Rutinas/RutinaPorGrupo",
 
   //Ricardo
   listarMembresias:"/api/Clientes/listarmembresias",

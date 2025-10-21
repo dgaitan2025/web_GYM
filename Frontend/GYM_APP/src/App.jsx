@@ -14,6 +14,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import VistaDashAdmin from "./Vistas/VistaDashAdmin"
 import VistaAsistencia from "./Vistas/VistaAsistencia"
 import VistaAsigRutina from "./Vistas/VistaAsigRutina"
+import VistaAsigRutinaCliente from "./Vistas/VistaAsigRutinaCliente"
+import VistaInicioComun from "./Vistas/VistaInicioComun"
 
 function App() {
 
@@ -28,7 +30,7 @@ function App() {
         {/* ✅ RUTA PADRE CON RUTAS ANIDADAS */}
         <Route path="/SiteDinamic" element={<PrivateRoute><SiteDinamic /></PrivateRoute>}>
           {/* ✅ RUTA HIJA */}
-          <Route index element={<VistaEnConstruccion />}/>
+          <Route index element={<VistaInicioComun />}/>
           <Route path="VistaDashAdmin" element={<RequireRole roles={[1,4]}><VistaDashAdmin /></RequireRole>}>
             {/* Hijas (dashboards) */}
             <Route index element={<DashContent />} />
@@ -39,6 +41,7 @@ function App() {
           <Route path="VistaRutinas" element={<RequireRole roles={[3]}><VistaRutinas /></RequireRole>}/>
           <Route path="VistaAsigRutina" element={<RequireRole roles={[3]}><VistaAsigRutina /></RequireRole>}/>
           <Route path="VistaAsistencia" element={<RequireRole roles={[2]}><VistaAsistencia/></RequireRole>}/>
+          <Route path="VistaAsigRutinaCliente" element={<RequireRole roles={[3]}><VistaAsigRutinaCliente/></RequireRole>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>
