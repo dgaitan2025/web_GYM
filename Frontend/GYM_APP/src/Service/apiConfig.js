@@ -1,6 +1,6 @@
 // DOminio
 export const URL = "http://localhost:5230"; //DG
-const API_URL = "https://Compiladores2025.somee.com"; //RD
+const API_URL = "https://localhost:7288" //"https://Compiladores2025.somee.com"; //RD
 
 
 // Endpoints organizados
@@ -12,6 +12,11 @@ export const ENDPOINTS = {
   actualizarGrupoMuscular: "/api/GrupoMusculares/Actualizar",
   elimindarGrupoMuscular:"/api/GrupoMusculares/Eliminar",
   insertarGrupoMuscular: "/api/GrupoMusculares/Crear",
+  listarRutinas: "/api/Rutinas/ALL",
+  insetarRutina: "/api/Rutinas/Crear",
+  obtenerRutina: (id) => `/api/Rutinas/${id}`,
+  actualizarRutina: "/api/Rutinas/Actualizar",
+  eliminarRutina:"/api/Rutinas/Eliminar",
 
   //Ricardo
   listarMembresias:"/api/Clientes/listarmembresias",

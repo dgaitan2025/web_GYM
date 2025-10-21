@@ -294,6 +294,57 @@ color:#1c1c1c;
   z-index: 0;
 }
 
+select[name="grupoMuscular"] {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2d2d2d;
+  background-color: #fafafa;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  appearance: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='22' viewBox='0 0 24 24' width='22' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 12px);
+  background-position-y: center;
+  background-size: 18px;
+}
+
+/* Hover - efecto sutil */
+select[name="grupoMuscular"]:hover {
+  background-color: #ffffff;
+  border-color: #a3bffa;
+  box-shadow: 0 2px 6px rgba(13, 110, 253, 0.1);
+}
+
+/* Focus - borde azul suave */
+select[name="grupoMuscular"]:focus {
+  border-color: #0d6efd;
+  background-color: #ffffff;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.25);
+}
+
+/* Opciones internas (mejor contraste) */
+select[name="grupoMuscular"] option {
+  color: #222;
+  font-size: 15px;
+  background-color: #ffffff;
+  padding: 8px;
+}
+
+/* Placeholder */
+select[name="grupoMuscular"] option[value=""] {
+  color: #777;
+  font-style: italic;
+}
+
+
+
 
 
 
