@@ -16,6 +16,7 @@ import VistaAsistencia from "./Vistas/VistaAsistencia"
 import VistaAsigRutina from "./Vistas/VistaAsigRutina"
 import VistaAsigRutinaCliente from "./Vistas/VistaAsigRutinaCliente"
 import VistaInicioComun from "./Vistas/VistaInicioComun"
+import VistaReportes from "./Vistas/VistaReportes"
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="VistaAsigRutina" element={<RequireRole roles={[3]}><VistaAsigRutina /></RequireRole>}/>
           <Route path="VistaAsistencia" element={<RequireRole roles={[2]}><VistaAsistencia/></RequireRole>}/>
           <Route path="VistaAsigRutinaCliente" element={<RequireRole roles={[3]}><VistaAsigRutinaCliente/></RequireRole>}/>
+          <Route path="VistaReportes" element={<RequireRole roles={[1]}><VistaReportes/></RequireRole>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 
         </Route>

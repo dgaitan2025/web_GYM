@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import GraficoPie from "../Graficas/GraficoPie";
-import VistaEnConstruccion from "../Vistas/VistaEnConstruccion";
+import VistaInicioComun from "../Vistas/VistaInicioComun"
 import { RequireRole } from "../Funciones/PrivateRoute";
 // import Membresias from "../Graficas/Membresias";
 
@@ -13,6 +13,6 @@ export default function DashContent() {
     // case "Membresias":
     //   return <Membresias />;
     default:
-      return <VistaEnConstruccion />;
+      return <VistaInicioComun />; 
   }
 }

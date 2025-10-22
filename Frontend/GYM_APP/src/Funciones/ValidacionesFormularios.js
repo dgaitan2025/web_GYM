@@ -1,5 +1,6 @@
 //Validaciones en tiempo real
 import { cuiValido } from "../Funciones/validaDPI.js";
+const SOLO_LETRAS_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
 const CORREO_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -159,9 +160,7 @@ export function validateForm(formData, setErrors) {
         newErrors.id_Sucursal = "El ID de membresía es obligatorio";
     }
 
-    if (formData.foto64 === "") {
-        newErrors.photo = "debe de tomar fotografia"
-    }
+    
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

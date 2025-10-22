@@ -1,63 +1,110 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ExpEmpleado.css";
+import { UrlWithApi, ENDPOINTS } from "../Service/apiConfig";
+import { Procesando } from "../Componente/Espera";
+
+const { showLoading, closeLoading } = Procesando();
 
 const Field = ({ label, name, value, onChange, isEditing, readOnly }) => (
   <div className="field">
     <label>{label}</label>
     {isEditing && !readOnly ? (
-      <input type="text" name={name} value={value} onChange={onChange} placeholder="..." />
+      <input
+        type="text"
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder="..."
+      />
     ) : (
       <p>{value || "—"}</p>
     )}
   </div>
 );
 
-const ExpEmpleado = ({ empleadoId }) => {
-  const [empleadoData, setEmpleadoData] = useState(null); // Datos obtenidos de la API
-  const [formData, setFormData] = useState({});   // Datos para edición
-  const [isEditing, setIsEditing] = useState(false); // Control del modo edición
+const ExpCliente = ({ userId, onClose }) => {
+  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
 
-  const branchNames = { 1: "Sucursal Centro", 2: "Sucursal Norte", 3: "Sucursal Sur" };
-  const roleNames = { 1: "Administrador", 2: "Instructor", 3: "Recepcionista" };
-
+  // 🔹 Obtener cliente por ID
   useEffect(() => {
-    if (!empleadoId) return; // Si no hay empleadoId, no hace nada
+    if (userId == null) return;
 
-    axios.get(`/api/empleados/${empleadoId}`)
-      .then(res => {
+    axios
+      .get(UrlWithApi(ENDPOINTS.datosEmpleado(userId)))
+      .then((res) => {
         if (res.data) {
-          setEmpleadoData(res.data); // Guardar datos reales
-          setFormData(res.data); // Inicializar formulario editable
+          setUserData(res.data);
+          setFormData(res.data);
         }
       })
       .catch(() => {
-        // Si hay error de conexión, no se muestra mensaje, solo deja campos vacíos
-        setEmpleadoData(null);
+        setUserData(null);
         setFormData({});
       });
-  }, [empleadoId]);
+  }, [userId]);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = () => {
-    axios.put(`/api/empleados/${empleadoId}`, formData)
-      .then(res => {
-        setEmpleadoData(res.data);
-        setIsEditing(false); // Sale del modo edición
-      })
-      .catch(() => {
-        // En caso de error, por ahora no se muestra mensaje
-      });
-  };
+  // 🔹 Guardar cambios
+const handleSubmit = async () => {
+  onClose();
+  showLoading("Modificando", "Procesando");
 
-   const fields = [
+  try {
+    const payload = {
+      empleado: {
+        id_Cliente: userData.id_Empleado,
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        telefono: formData.telefono,
+        fechaNacimiento: "",
+        foto: "",
+        idTipoUsuario: 0,
+        idMembresia: 0,
+        idSucursal: 0,
+        numero_Identificacion: ""
+      },
+      usuario: {
+        idUsuario: 0,
+        usuario: formData.usuario,
+        contraseña: formData.contraseña,
+        correo: formData.correo,
+        idTipo: 0,
+        id_Sucursal: 0
+      }
+    };
+
+    console.log("datos empleado editar ",payload)
+    const response = await axios.put(
+      UrlWithApi(ENDPOINTS.empleadoActualizar(userData.id_Empleado)),
+      payload
+    );
+
+    const data = response.data;
+
+    if (data.success) {
+      closeLoading(true, data.Mensaje || "Actualizado correctamente");
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      closeLoading(false, data.Mensaje || "Error al actualizar");
+    }
+  } catch (err) {
+    closeLoading(false, "Error al conectarse al servidor");
+  }
+};
+
+  // 🔹 Campos visibles
+  const fields = [
     { label: "Nombre", name: "nombre" },
     { label: "Apellido", name: "apellido" },
     { label: "Teléfono", name: "telefono" },
-    { label: "Correo", name: "correo" },
-    { label: "Rol", name: "idRol", readOnly: true },
-    { label: "Sucursal", name: "idSucursal", readOnly: true },
+    { label: "Correo Electrónico", name: "correo" },
+    { label: "Usuario", name: "usuario",readOnly: true  },
+    { label: "Contraseña", name: "contraseña"  },
   ];
 
 
@@ -66,35 +113,24 @@ const ExpEmpleado = ({ empleadoId }) => {
     <div className="exp-cliente-container">
       {/* HEADER */}
       <div className="exp-cliente-header">
-        <h2>Expediente de Empleado</h2>
+        <h2>Expediente Empleado</h2>
       </div>
 
-      {/* FOTO Y MEMBRESÍA */}
       <div className="exp-cliente-profile">
-        <img
-          src={empleadoData?.foto || "/default-avatar.png"} // Foto de usuario o default
-          alt={`${empleadoData?.nombre || ""} ${empleadoData?.apellido || ""}`}
-          className="exp-profile-pic"
-        />
+        
         <div className="profile-info">
-          <h3>{empleadoData?.nombre || "Nombre"} {empleadoData?.apellido || "Apellido"}</h3>
-          <span className="membership">
-            {roleNames[empleadoData?.idRol] || "Sin rol asignado"}
-          </span>
+          <h3>
+            {userData?.nombre || "Nombre"} {userData?.apellido || "Apellido"}
+          </h3>
+          
         </div>
       </div>
-
       {/* DATOS PERSONALES */}
       <div className={`exp-cliente-data ${isEditing ? "editing" : ""}`}>
-        <h3>Datos del Empleado</h3>
+        <h3>Datos Personales</h3>
         <div className="data-grid">
-          {fields.map(field => {
-            let value = formData[field.name] || empleadoData?.[field.name];
-
-            // Convertir IDs a nombres legibles
-            if (field.name === "idRol") value = roleNames[value] || "";
-            if (field.name === "idSucursal") value = branchNames[value] || "";
-
+          {fields.map((field) => {
+            const value = formData[field.name] ?? userData?.[field.name] ?? "";
             return (
               <Field
                 key={field.name}
@@ -110,19 +146,31 @@ const ExpEmpleado = ({ empleadoId }) => {
         </div>
       </div>
 
-      {/* BOTONES DE ACCIÓN */}
+      {/* BOTONES */}
       <div className="exp-actions">
         {isEditing ? (
           <>
-            <button className="btn cancel" onClick={() => setIsEditing(false)}>Cancelar</button>
-            <button className="btn save" onClick={handleSubmit}>Guardar</button>
+            <button
+              className="btn cancel"
+              onClick={() => {
+                setFormData(userData);
+                setIsEditing(false);
+              }}
+            >
+              Cancelar
+            </button>
+            <button className="btn save" onClick={handleSubmit}>
+              Guardar
+            </button>
           </>
         ) : (
-          <button className="btn edit" onClick={() => setIsEditing(true)}>Editar</button>
+          <button className="btn edit" onClick={() => setIsEditing(true)}>
+            Editar
+          </button>
         )}
       </div>
     </div>
   );
 };
 
-export default ExpEmpleado;
+export default ExpCliente;

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import Swal from "sweetalert2";
+import { registrarAsistencia } from "../Funciones/Api_asistencia"
 
 const LectorQR = () => {
   const [cameras, setCameras] = useState([]);
@@ -35,10 +36,18 @@ const LectorQR = () => {
           if (decodedText !== lastResult) {
             setLastResult(decodedText);
             stopScanner()
+
+        
+              const usuario = decodedText.replace("Usuario:", "").trim();
+              console.log("Usuario detectado:", usuario);
+              registrarAsistencia(5, 1);
+
+
+
             Swal.fire({
               icon: "success",
               title: "QR Detectado ✅",
-              text: decodedText,
+              text: usuario,
               timer: 2000,
               showConfirmButton: false,
             });

@@ -12,6 +12,8 @@ const { showLoading, closeLoading } = Procesando();
 
 function Formulario({ onClose }) {
 
+  
+
   const initialFormData = {
     nombre: "",
     apellido: "",
@@ -38,11 +40,15 @@ function Formulario({ onClose }) {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+    console.log("📤 Intentando registrar empleado:", formData);
 
     if (!validateForm(formData, setErrors)) return;
 
     onClose();
-    showLoading("Registro Usuarios", "Registrando");
+
+    
+
+    showLoading("Registro Empleado", "Registrando");
     try {
       const cliente = {
 
@@ -274,18 +280,7 @@ function Formulario({ onClose }) {
                 {errors.id_puesto && <p className="error">{errors.id_puesto}</p>}
               </div>
 
-              <div>
-                <label>Foto:</label>
-                {errors.photo && <p className="error">{errors.photo}</p>}
-                <button type="button" className="boton-camara" onClick={abrirCamara}>Usar Cámara</button>
-              </div>
-
-              {previewUrl && (
-                <div className="preview-container">
-                  <p>Vista previa de la foto:</p>
-                  <img src={previewUrl} alt="Vista previa" className="preview-img" />
-                </div>
-              )}
+              
 
               <button type="submit" className="boton-registrar">Registrar Cliente</button>
             </form>
@@ -294,19 +289,7 @@ function Formulario({ onClose }) {
         document.body
       )}
 
-      {showCamera && createPortal(
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <video ref={videoRef} autoPlay className="video" />
-            <canvas ref={canvasRef} style={{ display: "none" }} />
-            <div className="modal-buttons">
-              <button type="button" onClick={tomarFoto}>Tomar Foto</button>
-              <button type="button" onClick={cerrarCamara}>Cancelar</button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+      
     </>
   );
 }

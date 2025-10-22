@@ -34,7 +34,12 @@ export const ENDPOINTS = {
   obtenerCliente: (id) => `/api/Clientes/ClientesDetails/${id}`,
   actualizarCliente: (id) => `/api/Clientes/ClientesActualizar/${id}`,
   crearOrden:"/api/Ordenes/OrdenesCrear",
-  eliminarCliente:(id) =>`/api/Clientes/ClientesEliminar/${id}`
+  eliminarCliente:(id) =>`/api/Clientes/ClientesEliminar/${id}`,
+  datosEmpleado:(id) =>`/api/Empleadoes/EmpleadosDetails/${id}`,
+  empleadoActualizar: (id)=>`/api/Empleadoes/EmpleadosActualizar/${id}`,
+  eliminarCliente: (id) =>`/api/Empleadoes/EmpleadosEliminar/${id}`,
+  reporteClientes: "/api/Reportes/RptClienteIndex?base64=false",
+  asistencia:"/api/Asistenciums/AsistenciaCrear"
 
 
 };
