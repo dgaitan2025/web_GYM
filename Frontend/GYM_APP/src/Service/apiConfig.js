@@ -18,6 +18,8 @@ export const ENDPOINTS = {
   actualizarRutina: "/api/Rutinas/Actualizar",
   eliminarRutina:"/api/Rutinas/Eliminar",
   rutinasPorGrupo:"/api/Rutinas/RutinaPorGrupo",
+  obtenerDatosOrden: (idUsuario) => `/api/Rutinas/ObtenerDatosOrden/${idUsuario}`,
+
 
   //Ricardo
   listarMembresias:"/api/Clientes/listarmembresias",
@@ -28,7 +30,11 @@ export const ENDPOINTS = {
   indexEmpleados:"/api/Empleadoes/EmpleadosIndex",
   insertCliente: "/api/Clientes/ClientesCrear",
   insertEmpleado: "/api/empleadoes/EmpleadosCrear",
-  recuperarClave:"/api/Login/RecuperarContraseña"
+  recuperarClave:"/api/Login/RecuperarContraseña",
+  obtenerCliente: (id) => `/api/Clientes/ClientesDetails/${id}`,
+  actualizarCliente: (id) => `/api/Clientes/ClientesActualizar/${id}`,
+  crearOrden:"/api/Ordenes/OrdenesCrear",
+  eliminarCliente:(id) =>`/api/Clientes/ClientesEliminar/${id}`
 
 
 };

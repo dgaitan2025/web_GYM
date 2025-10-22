@@ -25,6 +25,7 @@ export default function SiteDinamic() {
     { path: "/sitedinamic/VistaAsigRutina", label: "Gestionar rutinas", roles: [3] },
     { path: "/sitedinamic/VistaRutinas", label: "Gestionar grupo muscular", roles: [3] },
     { path: "/sitedinamic/EnConstruccion", label: "Historial de rutinas", roles: [40] },
+   
     
   ];
 

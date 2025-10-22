@@ -1,132 +1,114 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ExpCliente.css";
+import { UrlWithApi, ENDPOINTS } from "../Service/apiConfig";
+import { Procesando } from "../Componente/Espera";
 
+const { showLoading, closeLoading } = Procesando();
 
-
-
-
-/* ================================
-   Componente Field
-   ----------------
-   - Representa un campo del formulario de datos personales.
-   - Si está en modo edición (isEditing) y no es de solo lectura (readOnly),
-     se muestra un input editable.
-   - Si no, se muestra un <p> con el valor actual.
-   - El placeholder "..." se usa si el campo está vacío.
-================================ */
 const Field = ({ label, name, value, onChange, isEditing, readOnly }) => (
   <div className="field">
     <label>{label}</label>
     {isEditing && !readOnly ? (
-      <input type="text" name={name} value={value} onChange={onChange} placeholder="..." />
+      <input
+        type="text"
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder="..."
+      />
     ) : (
       <p>{value || "—"}</p>
     )}
   </div>
 );
 
+const ExpCliente = ({ userId, onClose }) => {
+  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
 
-
-/* ================================
-   Componente principal: ExpCliente
-   ----------------
-   Props:
-   - userId: ID del usuario que se quiere mostrar.
-   
-   Estado:
-   - userData: almacena los datos reales del usuario desde backend.
-   - formData: almacena los datos editables para edición de formulario.
-   - isEditing: controla si se está en modo edición.
-================================ */
-const ExpCliente = ({ userId }) => {
-  const [userData, setUserData] = useState(null); // Datos obtenidos de la API
-  const [formData, setFormData] = useState({});   // Datos para edición
-  const [isEditing, setIsEditing] = useState(false); // Control del modo edición
-
-  /* --------------------------
-     Mapas para mostrar nombres legibles
-     - membershipNames: mapea idMembresia a texto
-     - userTypeNames: mapea idTipoUsuario a texto
-     - branchNames: mapea idSucursal a texto
-  -------------------------- */
-  const membershipNames = { 1: "Básica", 2: "Estándar", 3: "Premium", 7: "VIP" };
-  const userTypeNames = { 1: "Cliente", 2: "Administrador", 3: "Instructor" };
-  const branchNames = { 1: "Sucursal Centro", 2: "Sucursal Norte", 3: "Sucursal Sur" };
-
-  /* ================================
-     useEffect para obtener datos del usuario
-     ----------------
-     - Hace un GET a /api/users/:userId
-     - Si hay datos, los almacena en userData y formData
-     - Si no hay datos o hay error, deja los campos vacíos
-  ================================= */
+  // 🔹 Obtener cliente por ID
   useEffect(() => {
-    console.log(userId)
-    if (!userId) return; // Si no hay userId, no hace nada
+    if (userId == null) return;
 
-    axios.get(`/api/users/${userId}`)
-      .then(res => {
+    axios
+      .get(UrlWithApi(ENDPOINTS.obtenerCliente(userId)))
+      .then((res) => {
         if (res.data) {
-          setUserData(res.data); // Guardar datos reales
-          setFormData(res.data); // Inicializar formulario editable
+          setUserData(res.data);
+          setFormData(res.data);
         }
       })
       .catch(() => {
-        // Si hay error de conexión, no se muestra mensaje, solo deja campos vacíos
         setUserData(null);
         setFormData({});
       });
   }, [userId]);
 
-  /* ================================
-     handleChange
-     ----------------
-     - Se llama al cambiar un input
-     - Actualiza formData en tiempo real
-  ================================= */
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  /* ================================
-     handleSubmit
-     ----------------
-     - Envía los datos editados al backend
-     - Hace PUT a /api/users/:userId
-     - Actualiza userData con la respuesta
-  ================================= */
-  const handleSubmit = () => {
-    axios.put(`/api/users/${userId}`, formData)
-      .then(res => {
-        setUserData(res.data);
-        setIsEditing(false); // Sale del modo edición
-      })
-      .catch(() => {
-        // En caso de error, por ahora no se muestra mensaje
-      });
-  };
+  // 🔹 Guardar cambios
+const handleSubmit = async () => {
+  onClose();
+  showLoading("Modificando", "Procesando");
 
-  /* ================================
-     Campos a mostrar en la UI
-     ----------------
-     - Algunos campos son de solo lectura (readOnly)
-     - Otros se pueden editar
-  ================================= */
+  try {
+    const payload = {
+      clientes: {
+        id_Cliente: userData.id_Cliente,
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        telefono: formData.telefono,
+        fechaNacimiento: formData.fecha_Nacimiento,
+        foto: "",
+        idTipoUsuario: 0,
+        idMembresia: 0,
+        idSucursal: 0,
+        numero_Identificacion: ""
+      },
+      usuario: {
+        idUsuario: userData.idUsuario,
+        usuario: formData.usuario,
+        contraseña: formData.contraseña,
+        correo: formData.correo,
+        idTipo: 0,
+        id_Sucursal: 0
+      }
+    };
+
+    const response = await axios.put(
+      UrlWithApi(ENDPOINTS.actualizarCliente(userData.id_Cliente)),
+      payload
+    );
+
+    const data = response.data;
+
+    if (data.success) {
+      closeLoading(true, data.Mensaje || "Actualizado correctamente");
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      closeLoading(false, data.Mensaje || "Error al actualizar");
+    }
+  } catch (err) {
+    closeLoading(false, "Error al conectarse al servidor");
+  }
+};
+
+  // 🔹 Campos visibles
   const fields = [
     { label: "Nombre", name: "nombre" },
     { label: "Apellido", name: "apellido" },
     { label: "Teléfono", name: "telefono" },
-    { label: "Fecha de Nacimiento", name: "fechaNacimiento" },
-    { label: "Correo", name: "correo" },
-    { label: "Número de Identificación", name: "numero_Identificacion" },
-    { label: "Tipo de Usuario", name: "idTipoUsuario", readOnly: true },
-    { label: "Sucursal", name: "idSucursal", readOnly: true },
+    { label: "Fecha de Nacimiento", name: "fecha_Nacimiento" },
+    { label: "Edad", name: "edad", readOnly: true },
+    { label: "Correo Electrónico", name: "correo" },
+    { label: "Membresía Activa", name: "membresia_Activa", readOnly: true },
+    { label: "Usuario", name: "usuario",readOnly: true  },
+    { label: "Contraseña", name: "contraseña"  },
   ];
 
-  /* ================================
-     Render principal
-     - Siempre se renderiza la UI aunque userData sea null
-     - Los campos vacíos muestran placeholders o "—"
-  ================================= */
   return (
     <div className="exp-cliente-container">
       {/* HEADER */}
@@ -134,17 +116,19 @@ const ExpCliente = ({ userId }) => {
         <h2>Expediente de Cliente</h2>
       </div>
 
-      {/* FOTO Y MEMBRESÍA */}
+      {/* FOTO Y DATOS BÁSICOS */}
       <div className="exp-cliente-profile">
         <img
-          src={userData?.foto || "/default-avatar.png"} // Foto de usuario o default
+          src={userData?.foto || "/default-avatar.png"}
           alt={`${userData?.nombre || ""} ${userData?.apellido || ""}`}
           className="exp-profile-pic"
         />
         <div className="profile-info">
-          <h3>{userData?.nombre || "Nombre"} {userData?.apellido || "Apellido"}</h3>
+          <h3>
+            {userData?.nombre || "Nombre"} {userData?.apellido || "Apellido"}
+          </h3>
           <span className="membership">
-            {membershipNames[userData?.idMembresia] || "Sin membresía"}
+            {userData?.membresia_Activa || "Sin membresía"}
           </span>
         </div>
       </div>
@@ -153,13 +137,8 @@ const ExpCliente = ({ userId }) => {
       <div className={`exp-cliente-data ${isEditing ? "editing" : ""}`}>
         <h3>Datos Personales</h3>
         <div className="data-grid">
-          {fields.map(field => {
-            let value = formData[field.name] || userData?.[field.name];
-
-            // Convertir IDs a nombres legibles
-            if (field.name === "idTipoUsuario") value = userTypeNames[value] || "";
-            if (field.name === "idSucursal") value = branchNames[value] || "";
-
+          {fields.map((field) => {
+            const value = formData[field.name] ?? userData?.[field.name] ?? "";
             return (
               <Field
                 key={field.name}
@@ -175,15 +154,27 @@ const ExpCliente = ({ userId }) => {
         </div>
       </div>
 
-      {/* BOTONES DE ACCIÓN */}
+      {/* BOTONES */}
       <div className="exp-actions">
         {isEditing ? (
           <>
-            <button className="btn cancel" onClick={() => setIsEditing(false)}>Cancelar</button>
-            <button className="btn save" onClick={handleSubmit}>Guardar</button>
+            <button
+              className="btn cancel"
+              onClick={() => {
+                setFormData(userData);
+                setIsEditing(false);
+              }}
+            >
+              Cancelar
+            </button>
+            <button className="btn save" onClick={handleSubmit}>
+              Guardar
+            </button>
           </>
         ) : (
-          <button className="btn edit" onClick={() => setIsEditing(true)}>Editar</button>
+          <button className="btn edit" onClick={() => setIsEditing(true)}>
+            Editar
+          </button>
         )}
       </div>
     </div>

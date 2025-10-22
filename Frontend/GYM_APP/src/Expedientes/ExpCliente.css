@@ -1,39 +1,54 @@
-/* Contenedor principal */
+/* ===== CONTENEDOR PRINCIPAL ===== */
 .exp-cliente-container {
   width: 100%;
-  max-height: 90vh;
-  box-sizing: border-box;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0;
+  padding: 1rem 2rem 4rem 2rem; /* espacio extra para los botones */
   background-color: #ffffff;
   border-radius: 1.2rem;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow: auto;     /* 🔥 deja crecer según los hijos */
+  box-sizing: border-box;
 }
 
-/* HEADER */
+/* ===== BOTONES ===== */
+.exp-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 1.2rem 1.2rem;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* ===== HEADER ===== */
 .exp-cliente-header {
   background-color: #0d1d3a;
   color: #ffffff;
   padding: 1rem 2rem;
   text-align: center;
+  border-radius: 1.2rem 1.2rem 0 0;
 }
 
 .exp-cliente-header h2 {
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  color: #ffffff;
 }
 
-/* PERFIL */
+/* ===== PERFIL ===== */
 .exp-cliente-profile {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   padding: 1rem 1.5rem;
+  flex-wrap: wrap;
 }
 
 .exp-profile-pic {
@@ -64,85 +79,41 @@
   margin-top: 0.2rem;
 }
 
-/* DATOS PERSONALES */
+/* ===== SECCIÓN CON SCROLL ===== */
 .exp-cliente-data {
+  flex: 1;
+  overflow-y: auto;           /* 🔥 scroll vertical */
+  max-height: 55vh;           /* 🔹 controla el área visible */
   background-color: #f9f9f9;
   padding: 1rem 1.5rem;
-  border-radius: 0 0 1.2rem 1.2rem;
-  margin: 0 1.5rem 1.5rem 1.5rem;
+  border-radius: 0.8rem;
+  margin: 1rem 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: box-shadow 0.2s;
+  scrollbar-width: thin;
+  scrollbar-color: #243fed #e5e7eb;
 }
 
-.exp-cliente-data.editing {
-  box-shadow: 0 0 15px rgba(36,63,237,0.2);
+/* Scroll personalizado */
+.exp-cliente-data::-webkit-scrollbar {
+  width: 8px;
 }
-
-.exp-cliente-data h3 {
-  font-size: 1.35rem;
-  color: #111827;
-  margin-bottom: 1rem;
-  position: relative;
-}
-
-.exp-cliente-data h3::after {
-  content: '';
-  display: block;
-  width: 50px;
-  height: 2px;
+.exp-cliente-data::-webkit-scrollbar-thumb {
   background-color: #243fed;
-  margin-top: 0.3rem;
-  border-radius: 1px;
+  border-radius: 10px;
+}
+.exp-cliente-data::-webkit-scrollbar-track {
+  background-color: #e5e7eb;
 }
 
-/* GRID DE CAMPOS */
+/* ===== GRID ===== */
 .data-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.field label {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 0.25rem;
-  display: block;
-}
-
-.field p {
-  color: #111827;
-  margin: 0;
-  padding: 0.25rem 0;
-  font-size: 0.95rem;
-}
-
-.field input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  outline: none;
-  font-size: 0.95rem;
-  background-color: #ffffff;
-  color: #111827;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.field input:focus {
-  border-color: #243fed;
-  box-shadow: 0 0 0 3px rgba(36,63,237,0.2);
-}
-
-/* BOTONES */
-.exp-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  
-  margin-top: auto;       /* empuja hacia abajo */
-  padding: 1rem;
-}
-
+/* ===== BOTONES INDIVIDUALES ===== */
 .btn {
   padding: 0.5rem 1rem;
   border-radius: 0.6rem;
@@ -173,31 +144,46 @@
   transform: translateY(-1px);
 }
 
-/* ESTADOS */
-.exp-loading, .exp-error {
-  text-align: center;
-  font-size: 1.1rem;
-  color: #6b7280;
-  margin: 2rem 0;
-}
+/* ===== MODAL ===== */
 
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-   z-index: 2000;
 
+.modal2-content {
+  background: #fff;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow: hidden;            /* evita doble scroll */
   display: flex;
-  justify-content: center;
-  align-items: center; /* centra vertical */
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.swal2-container {
-  z-index: 9999 !important;
+.close-exp {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-.modal-content {
-  display: inline-block;  /* 🔥 se adapta al contenido */
+.close-exp:hover {
+  color: #007bff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

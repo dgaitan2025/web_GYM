@@ -1,37 +1,20 @@
+// src/Vistas/VistaEnConstruccion.jsx
 import React from "react";
 import "./VistaInicioComun.css";
 
-const VistaInicioComun = () => {
+const VistaEnConstruccion = () => {
   return (
-    <main className="inicio-container">
-      <header className="inicio-header">
-        <h1>Bienvenido a Gym Brisas</h1>
-        <p>Tu espacio para mantenerte en forma, saludable y motivado.</p>
-      </header>
-
-      <section className="inicio-section">
-        <div className="inicio-card">
-          
-          <h3>Rutinas personalizadas</h3>
-          <p>Explora nuestras rutinas para cada grupo muscular y nivel.</p>
-        </div>
-
-        <div className="inicio-card">
-          
-          <h3>Consejos de nutrición</h3>
-          <p>Descubre cómo alimentar tu cuerpo para mejorar tu rendimiento.</p>
-        </div>
-
-        <div className="inicio-card">
-          
-          <h3>Comunidad Gym Brisas</h3>
-          <p>Conéctate con otros usuarios y comparte tus progresos.</p>
-        </div>
-      </section>
-
-      
+    <main className="main construccion-container">
+      <div className="construccion-content">
+        <img
+          src="/fit.jpg" // o usa una URL externa
+          alt="En construcción"
+          className="construccion-img"
+        />
+        <h2>Tu espacio para mantenerte en forma, saludable y motivado.</h2>
+      </div>
     </main>
   );
 };
 
-export default VistaInicioComun;
+export default VistaEnConstruccion;
