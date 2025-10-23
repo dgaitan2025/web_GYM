@@ -1,4 +1,4 @@
-import React, { useState, useRef} from "react";
+import React, { useState, useRef } from "react";
 import "../Front/SiteDinamic.jsx";
 import "./FormRegUsuario.css";
 import { insertarEmpleado } from "../Funciones/IntoEmpleadoService.js";
@@ -12,7 +12,7 @@ const { showLoading, closeLoading } = Procesando();
 
 function Formulario({ onClose }) {
 
-  
+
 
   const initialFormData = {
     nombre: "",
@@ -46,7 +46,7 @@ function Formulario({ onClose }) {
 
     onClose();
 
-    
+
 
     showLoading("Registro Empleado", "Registrando");
     try {
@@ -200,14 +200,29 @@ function Formulario({ onClose }) {
                   name="dpi"
                   value={formData.dpi}
                   onChange={(e) =>
-                    handleInputChange(e, formData, setFormData, errors, setErrors, setPreviewUrl)
+                    handleInputChange(
+                      e,
+                      formData,
+                      setFormData,
+                      errors,
+                      setErrors,
+                      setPreviewUrl
+                    )
                   }
                   required
                 />
+                <label>Extendido en:</label>
+
                 {errors.dpi && (
-                  <p className={errors.dpi.tipo === "error" ? "error" : "success"}>
-                    {errors.dpi.mensaje}
-                  </p>
+                  
+                  <input
+                  type="text"
+                  name="dpi"
+                  value={errors.dpi.mensaje}
+                  readOnly
+                  className={errors.dpi.tipo === "error" ? "error" : "success"}
+                  
+                />
                 )}
               </div>
 
@@ -280,7 +295,7 @@ function Formulario({ onClose }) {
                 {errors.id_puesto && <p className="error">{errors.id_puesto}</p>}
               </div>
 
-              
+
 
               <button type="submit" className="boton-registrar">Registrar Cliente</button>
             </form>
@@ -289,7 +304,7 @@ function Formulario({ onClose }) {
         document.body
       )}
 
-      
+
     </>
   );
 }

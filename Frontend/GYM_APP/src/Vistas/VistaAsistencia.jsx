@@ -1,76 +1,126 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import Swal from "sweetalert2";
-import { registrarAsistencia } from "../Funciones/Api_asistencia"
+import { registrarAsistencia, registrarSalida } from "../Funciones/Api_asistencia";
 
 const LectorQR = () => {
   const [cameras, setCameras] = useState([]);
   const [cameraId, setCameraId] = useState(null);
   const [scanning, setScanning] = useState(false);
+  const [modo, setModo] = useState(null); // 🔹 "entrada" o "salida"
   const [lastResult, setLastResult] = useState("");
   const qrRegionId = "qr-region";
   const qrRef = useRef(null);
 
+  // 🔹 Obtener cámaras al montar
   useEffect(() => {
     Html5Qrcode.getCameras()
       .then((devices) => {
-        setCameras(devices);
-        if (devices && devices.length) {
+        if (devices?.length) {
+          setCameras(devices);
           setCameraId(devices[0].id);
+        } else {
+          Swal.fire("Sin cámara", "No se detectaron cámaras disponibles", "warning");
         }
       })
       .catch((err) => console.error("Error al obtener cámaras:", err));
   }, []);
 
-  const startScanner = () => {
-    if (!cameraId) return;
+  // 🔹 Iniciar el escáner
+  const startScanner = async (tipo) => {
+    if (!cameraId) return Swal.fire("Error", "Selecciona una cámara antes de iniciar", "error");
+    if (scanning) return Swal.fire("Atención", "Ya hay un escaneo en proceso", "info");
 
+    setModo(tipo);
     const html5QrCode = new Html5Qrcode(qrRegionId);
+    qrRef.current = html5QrCode;
     setScanning(true);
 
-    html5QrCode
-      .start(
+    try {
+      await html5QrCode.start(
         cameraId,
         { fps: 10, qrbox: 250 },
-        (decodedText) => {
-          if (decodedText !== lastResult) {
+        async (decodedText) => {
+          if (decodedText) {
             setLastResult(decodedText);
-            stopScanner()
+            stopScanner();
 
-        
-              const usuario = decodedText.replace("Usuario:", "").trim();
-              console.log("Usuario detectado:", usuario);
-              registrarAsistencia(5, 1);
+            // 🔹 Extraer el usuario del texto QR
+            const usuario = decodedText.replace("Usuario:", "").trim();
+            console.log(`Usuario detectado: ${usuario} | Modo: ${tipo}`);
 
+            // 🔹 Determinar tipo de asistencia (1 = entrada, 2 = salida)
+            const tipoAsistencia = tipo === "entrada" ? 1 : 2;
+            console.log("valor de entrada ",  tipoAsistencia)
 
+            try {
+              if(tipoAsistencia === 1){
+                  const asisREG = await registrarAsistencia(usuario, 1);
+                   console.log("valor de entrada ",  asisREG)
+                   setLastResult(decodedText);
+              }else{
+                  registrarSalida(usuario)
+                   console.log("valor de Salida ",  tipoAsistencia)
+                   setLastResult(decodedText);
 
-            Swal.fire({
-              icon: "success",
-              title: "QR Detectado ✅",
-              text: usuario,
-              timer: 2000,
-              showConfirmButton: false,
-            });
-            console.log("Código detectado:", decodedText);
+              }
+             
+            } catch (error) {
+              console.error("Error al registrar asistencia:", error);
+              Swal.fire("Error", "No se pudo registrar la asistencia", "error");
+            }
           }
         },
         (errorMessage) => {
-          // no hacemos nada con los frames fallidos
+          // Frame fallido (sin QR válido) → no hacemos nada
         }
-      )
-      .catch((err) => {
-        console.error("Error al iniciar escáner:", err);
-        setScanning(false);
-      });
-
-    qrRef.current = html5QrCode;
-  };
-
-  const stopScanner = () => {
-    if (qrRef.current) {
-      qrRef.current.stop().then(() => setScanning(false));
+      );
+    } catch (err) {
+      console.error("Error al iniciar escáner:", err);
+      Swal.fire("Error", "No se pudo iniciar el lector", "error");
+      setScanning(false);
     }
   };
+
+  // 🔹 Detener escáner
+const stopScanner = async () => {
+  const qrInstance = qrRef.current;
+
+  if (!qrInstance) {
+    console.warn("No hay instancia activa del lector QR");
+    return;
+  }
+
+  try {
+    // 🔹 Primero detenemos el escáner y esperamos que termine
+    await qrInstance.stop();
+    console.log("✅ Escáner detenido correctamente.");
+
+    // 🔹 Luego limpiamos la vista solo si existe el contenedor
+    const qrRegionElement = document.getElementById(qrRegionId);
+    if (qrRegionElement) {
+      qrRegionElement.innerHTML = ""; // Limpia el div del video
+    }
+
+    // 🔹 Finalmente, reiniciamos estados
+    setScanning(false);
+    setModo(null);
+    qrRef.current = null;
+  } catch (err) {
+    console.error("❌ Error al detener el escáner:", err);
+
+    // 🔹 En caso de error, intenta forzar la limpieza manual
+    const videoTracks = document.querySelectorAll("video");
+    videoTracks.forEach((video) => {
+      video.srcObject?.getTracks().forEach((track) => track.stop());
+    });
+
+    setScanning(false);
+    setModo(null);
+    qrRef.current = null;
+  }
+};
+
 
   return (
     <div style={styles.container}>
@@ -82,6 +132,7 @@ const LectorQR = () => {
         <select
           value={cameraId || ""}
           onChange={(e) => setCameraId(e.target.value)}
+          disabled={scanning}
         >
           {cameras.map((cam, idx) => (
             <option key={idx} value={cam.id}>
@@ -94,28 +145,32 @@ const LectorQR = () => {
       {/* Región de video */}
       <div id={qrRegionId} style={styles.qrBox}></div>
 
-      {/* Botones de control */}
+      {/* Botones */}
       <div style={styles.buttons}>
         {!scanning ? (
-          <button onClick={startScanner} style={styles.btnStart}>
-            ▶ Iniciar lectura
-          </button>
+          <>
+            <button onClick={() => startScanner("entrada")} style={styles.btnEntrada}>
+              ▶ Registrar Entrada
+            </button>
+            <button onClick={() => startScanner("salida")} style={styles.btnSalida}>
+              ⏩ Registrar Salida
+            </button>
+          </>
         ) : (
           <button onClick={stopScanner} style={styles.btnStop}>
-            ⏹ Detener
+            ⏹ Detener Lector
           </button>
         )}
       </div>
 
       <p style={styles.result}>
-        📦 Último resultado:{" "}
-        <strong>{lastResult || "Esperando lectura..."}</strong>
+        📦 Último resultado: <strong>{lastResult || "Esperando lectura..."}</strong>
       </p>
     </div>
   );
 };
 
-// 🎨 Estilos básicos
+// 🎨 Estilos
 const styles = {
   container: {
     maxWidth: "500px",
@@ -135,9 +190,21 @@ const styles = {
     borderRadius: "10px",
     marginBottom: "10px",
   },
-  buttons: { marginBottom: "10px" },
-  btnStart: {
-    background: "#28a745",
+  buttons: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginBottom: "15px",
+  },
+  btnEntrada: {
+    background: "#007bff",
+    color: "#fff",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+  },
+  btnSalida: {
+    background: "#17a2b8",
     color: "#fff",
     padding: "10px 20px",
     border: "none",
@@ -151,6 +218,7 @@ const styles = {
     border: "none",
     borderRadius: "8px",
     cursor: "pointer",
+    width: "100%",
   },
   result: { marginTop: "10px", fontWeight: "bold" },
 };

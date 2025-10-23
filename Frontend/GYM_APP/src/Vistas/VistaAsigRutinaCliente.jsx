@@ -53,7 +53,7 @@ const Usuarios = () => {
 
                 <div className="d-flex flex-wrap gap-2">
                     <button className="add-user" onClick={() => setShowForm(true)}>
-                        Añadir
+                        Asignar
                     </button>
 
                 </div>
@@ -75,7 +75,7 @@ const Usuarios = () => {
                         <tr>
                             <th>Nombre</th>
                             <th>Descripción</th>
-                            <th>Opciones</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -89,14 +89,7 @@ const Usuarios = () => {
                                         <td>{grupo.nombre}</td>
                                         <td>{grupo.descripcion}</td>
 
-                                        <td>
-                                            {/*<button className="edit">Editar</button>*/}
-                                            <button className="edit" onClick={() => setSelectedUserId(grupo.id_Rutina)}>
-                                                Editar
-                                            </button>
-                                            <button className="delete" onClick={() => handleSubmit(grupo.id_Rutina)}>Eliminar</button>
-
-                                        </td>
+                                    
                                     </tr>
                                 ))}
                     </tbody>

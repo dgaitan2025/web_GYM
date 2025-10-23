@@ -17,6 +17,8 @@ import VistaAsigRutina from "./Vistas/VistaAsigRutina"
 import VistaAsigRutinaCliente from "./Vistas/VistaAsigRutinaCliente"
 import VistaInicioComun from "./Vistas/VistaInicioComun"
 import VistaReportes from "./Vistas/VistaReportes"
+import VistaPerfil from "./Vistas/VistaPerfil"
+
 
 function App() {
 
@@ -32,7 +34,7 @@ function App() {
         <Route path="/SiteDinamic" element={<PrivateRoute><SiteDinamic /></PrivateRoute>}>
           {/* ✅ RUTA HIJA */}
           <Route index element={<VistaInicioComun />}/>
-          <Route path="VistaDashAdmin" element={<RequireRole roles={[1,4]}><VistaDashAdmin /></RequireRole>}>
+          <Route path="VistaDashAdmin" element={<RequireRole roles={[1,2,3,4]}><VistaDashAdmin /></RequireRole>}>
             {/* Hijas (dashboards) */}
             <Route index element={<DashContent />} />
           </Route>
@@ -43,6 +45,7 @@ function App() {
           <Route path="VistaAsigRutina" element={<RequireRole roles={[3]}><VistaAsigRutina /></RequireRole>}/>
           <Route path="VistaAsistencia" element={<RequireRole roles={[2]}><VistaAsistencia/></RequireRole>}/>
           <Route path="VistaAsigRutinaCliente" element={<RequireRole roles={[3]}><VistaAsigRutinaCliente/></RequireRole>}/>
+          <Route path="VistaPerfil" element={<RequireRole roles={[4]}><VistaPerfil/></RequireRole>}/>
           <Route path="VistaReportes" element={<RequireRole roles={[1]}><VistaReportes/></RequireRole>}/>
           <Route path="EnConstruccion" element={<VistaEnConstruccion />}/>
 

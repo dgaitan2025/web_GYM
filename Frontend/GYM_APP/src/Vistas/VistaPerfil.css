@@ -1,0 +1,189 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.exp-cliente-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem 4rem 2rem; /* espacio extra para los botones */
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ===== BOTONES ===== */
+.exp-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 1.2rem 1.2rem;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* ===== HEADER ===== */
+.exp-cliente-header {
+  background-color: #0d1d3a;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  text-align: center;
+  border-radius: 1.2rem 1.2rem 0 0;
+}
+
+.exp-cliente-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* ===== PERFIL ===== */
+.exp-cliente-profile {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.exp-profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.exp-profile-pic:hover {
+  border-color: #243fed;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.profile-info h3 {
+  font-size: 1.4rem;
+  margin: 0;
+  color: #111827;
+}
+
+.membership {
+  font-size: 0.95rem;
+  color: #243fed;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* ===== SECCIÓN CON SCROLL ===== */
+.exp-cliente-data {
+  flex: 1;
+  overflow-y: auto;           /* 🔥 scroll vertical */
+  max-height: 55vh;           /* 🔹 controla el área visible */
+  background-color: #f9f9f9;
+  padding: 1rem 1.5rem;
+  border-radius: 0.8rem;
+  margin: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+  scrollbar-width: thin;
+  scrollbar-color: #243fed #e5e7eb;
+}
+
+/* Scroll personalizado */
+.exp-cliente-data::-webkit-scrollbar {
+  width: 8px;
+}
+.exp-cliente-data::-webkit-scrollbar-thumb {
+  background-color: #243fed;
+  border-radius: 10px;
+}
+.exp-cliente-data::-webkit-scrollbar-track {
+  background-color: #e5e7eb;
+}
+
+/* ===== GRID ===== */
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ===== BOTONES INDIVIDUALES ===== */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.btn.edit { background-color: #243fed; color: white; }
+.btn.edit:hover {
+  background-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(36,63,237,0.3);
+  transform: translateY(-2px);
+}
+
+.btn.save { background-color: #3b82f6; color: white; }
+.btn.save:hover {
+  background-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(36,98,246,0.3);
+  transform: translateY(-2px);
+}
+
+.btn.cancel { background-color: #e5e7eb; color: #111827; }
+.btn.cancel:hover {
+  background-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* ===== MODAL ===== */
+
+
+.modal2-content {
+  background: #fff;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow: hidden;            /* evita doble scroll */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.close-exp {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-exp:hover {
+  color: #007bff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

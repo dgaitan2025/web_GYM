@@ -5,6 +5,10 @@ import { insertarRutina } from "../Funciones/Api_rutinas.js";
 import { createPortal } from "react-dom";
 import { Procesando } from "../Componente/Espera.jsx";
 import { UrlWithApiDG, ENDPOINTS } from "../Service/apiConfig.js";
+import { obtenerAsistenciasDelDia } from "../Funciones/Api_asistencia.js";
+import { crearRegistroDiario } from "../Funciones/Api_asistencia.js"
+
+
 
 const SOLO_LETRAS_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 const normalizarLetras = (v) => v.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
@@ -12,12 +16,27 @@ const normalizarLetras = (v) => v.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g
 const { showLoading, closeLoading } = Procesando();
 
 function Formulario({ onClose }) {
+
+
+  //asistencia del dia
+
+const [usuariosDia, setUsuariosDia] = useState([]);
+
+// 🔹 Cargar usuarios con asistencia del día
+useEffect(() => {
+  const cargarUsuarios = async () => {
+    const data = await obtenerAsistenciasDelDia();
+    setUsuariosDia(data);
+  };
+  cargarUsuarios();
+}, []);
   const initialFormData = {
     nombre: "",
     descripcion: "",
     objetivo: "",
     grupoMuscular: "",
     rutinaAsociada: "",
+    usuarioAsistencia: "",
   };
 
   const [grupos, setGrupos] = useState([]);
@@ -65,60 +84,89 @@ function Formulario({ onClose }) {
   }, [formData.grupoMuscular]);
 
   // ------------ onChange con validaciones por campo ------------
+  const LETRAS_NUMEROS_REGEX = /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/;
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    const newErrors = { ...errors };
+  const { name, value } = e.target;
+  const newErrors = { ...errors };
 
-    if (name === "nombre" || name === "descripcion" || name === "objetivo") {
-      const limpio = normalizarLetras(value);
-      setFormData((p) => ({ ...p, [name]: limpio }));
-      if (!limpio.trim()) newErrors[name] = `El ${name} es obligatorio`;
-      else if (!SOLO_LETRAS_REGEX.test(limpio))
-        newErrors[name] = `El ${name} solo puede contener letras`;
-      else delete newErrors[name];
-      setErrors(newErrors);
-      return;
-    }
+  // 🔹 Campo nombre
+  if (name === "nombre") {
+    setFormData((p) => ({ ...p, [name]: value }));
 
-    if (name === "grupoMuscular") {
-      setFormData((p) => ({
-        ...p,
-        grupoMuscular: value,
-        rutinaAsociada: "", // reiniciar selección
-      }));
-      delete newErrors.grupoMuscular;
-      setErrors(newErrors);
-      return;
-    }
+    if (!value.trim()) newErrors[name] = "El campo es obligatorio";
+    else if (!LETRAS_NUMEROS_REGEX.test(value))
+      newErrors[name] = "Solo se permiten letras y números";
+    else delete newErrors[name];
 
-    if (name === "rutinaAsociada") {
-      setFormData((p) => ({ ...p, rutinaAsociada: value }));
-      return;
-    }
-  };
+    setErrors(newErrors);
+    return;
+  }
+
+  // 🔹 Campo descripción
+  if (name === "descripcion") {
+    setFormData((p) => ({ ...p, [name]: value }));
+
+    if (!value.trim()) newErrors[name] = "El campo descripción es obligatorio";
+    else delete newErrors[name];
+
+    setErrors(newErrors);
+    return;
+  }
+
+  // 🔹 Campo repeticiones
+  if (name === "repeticiones") {
+    const rep = Number(value);
+    setFormData((p) => ({ ...p, repeticiones: rep }));
+
+    if (!rep || rep <= 0) newErrors[name] = "Debe ingresar al menos 1 repetición";
+    else delete newErrors[name];
+
+    setErrors(newErrors);
+    return;
+  }
+
+  // 🔹 Otros campos existentes...
+  if (name === "grupoMuscular") {
+    setFormData((p) => ({
+      ...p,
+      grupoMuscular: value,
+      rutinaAsociada: "",
+    }));
+    delete newErrors.grupoMuscular;
+    setErrors(newErrors);
+    return;
+  }
+
+  if (name === "rutinaAsociada") {
+    setFormData((p) => ({ ...p, rutinaAsociada: value }));
+    return;
+  }
+
+  if (name === "usuarioAsistencia") {
+    setFormData((p) => ({ ...p, usuarioAsistencia: Number(value) }));
+    delete newErrors.usuarioAsistencia;
+    setErrors(newErrors);
+    return;
+  }
+};
+
 
   // ------------ Validación global antes de submit ------------
   const validate = () => {
     const newErrors = {};
     if (!formData.nombre.trim())
       newErrors.nombre = "El nombre es obligatorio";
-    else if (!SOLO_LETRAS_REGEX.test(formData.nombre))
+    else if (!LETRAS_NUMEROS_REGEX.test(formData.nombre))
       newErrors.nombre = "El nombre solo puede contener letras";
-
-    if (!formData.descripcion.trim())
-      newErrors.descripcion = "La descripción es obligatoria";
-    else if (!SOLO_LETRAS_REGEX.test(formData.descripcion))
-      newErrors.descripcion = "La descripción solo puede contener letras";
-
-    if (!formData.objetivo.trim())
-      newErrors.objetivo = "El objetivo es obligatorio";
-    else if (!SOLO_LETRAS_REGEX.test(formData.objetivo))
-      newErrors.objetivo = "El objetivo solo puede contener letras";
 
     if (!formData.grupoMuscular.trim())
       newErrors.grupoMuscular = "Debes seleccionar un grupo muscular";
 
+    if (!formData.rutinaAsociada.trim())
+      newErrors.rutinaAsociada = "Debes seleccionar una Rutina";
+
     setErrors(newErrors);
+    console.log("Error en formulario",newErrors)
     return Object.keys(newErrors).length === 0;
   };
 
@@ -131,20 +179,16 @@ function Formulario({ onClose }) {
 
     try {
       const rutina = {
-        Nombre: formData.nombre,
-        Descripcion: formData.descripcion,
-        Objetivo: formData.objetivo,
-        Id_Grupo: parseInt(formData.grupoMuscular),
-        estado: true,
+        Comentarios: formData.nombre,
+        Id_Rutina: parseInt(formData.rutinaAsociada),
+        Id_Asistencia: parseInt(formData.usuarioAsistencia),
+        
       };
 
-      const resultado = await insertarRutina(rutina);
-      if (resultado.success) {
-        closeLoading(true, resultado.mensaje);
-        setTimeout(() => window.location.reload(), 1000);
-      } else {
-        closeLoading(false, resultado.mensaje);
-      }
+      console.log("Datos a registrar rutina", rutina)
+
+         const resultado = await crearRegistroDiario(rutina);
+
     } catch (err) {
       console.error(err);
       closeLoading(false, "Error, intente más tarde.");
@@ -164,6 +208,23 @@ function Formulario({ onClose }) {
               <button type="button" className="cerrar-modal" onClick={onClose}>
                 ✕
               </button>
+
+              <div>
+                <label>Usuario con asistencia hoy:</label>
+                <select
+                  name="usuarioAsistencia"
+                  value={formData.usuarioAsistencia || ""}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccione un usuario</option>
+                  {usuariosDia.map((u) => (
+                    <option key={u.id_Asistencia} value={u.id_Asistencia}>
+                      {u.nombreCompleto}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               {/* 🔹 Grupo muscular */}
               <div>
@@ -187,13 +248,14 @@ function Formulario({ onClose }) {
               </div>
 
               {/* 🔹 Rutinas asociadas */}
-              {rutinas.length > 0 && (
+              
                 <div>
                   <label>Rutinas asociadas:</label>
                   <select
                     name="rutinaAsociada"
                     value={formData.rutinaAsociada}
                     onChange={handleChange}
+                    required
                   >
                     <option value="">Seleccione una rutina</option>
                     {rutinas.map((r) => (
@@ -202,8 +264,11 @@ function Formulario({ onClose }) {
                       </option>
                     ))}
                   </select>
+                  {errors.rutinaAsociada && (
+                  <p className="error">{errors.rutinaAsociada}</p>
+                )}
                 </div>
-              )}
+              
 
               {/* 🔹 Campos de texto */}
               <div>
@@ -218,7 +283,7 @@ function Formulario({ onClose }) {
                 {errors.nombre && <p className="error">{errors.nombre}</p>}
               </div>
 
-              <button type="submit" className="boton-registrar">
+              <button type="submit" className="boton-registrar" >
                 Registrar
               </button>
             </form>

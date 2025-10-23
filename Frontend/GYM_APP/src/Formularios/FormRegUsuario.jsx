@@ -353,9 +353,14 @@ function Formulario({ onClose }) {
                   required
                 />
                 {errors.dpi && (
-                  <p className={errors.dpi.tipo === "error" ? "error" : "success"}>
-                    {errors.dpi.mensaje}
-                  </p>
+                  <input
+                  type="text"
+                  name="dpi"
+                  value={errors.dpi.mensaje}
+                  readOnly
+                  className={errors.dpi.tipo === "error" ? "error" : "success"}
+                  
+                />
                 )}
               </div>
 

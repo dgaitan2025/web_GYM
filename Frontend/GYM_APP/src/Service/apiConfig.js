@@ -39,7 +39,11 @@ export const ENDPOINTS = {
   empleadoActualizar: (id)=>`/api/Empleadoes/EmpleadosActualizar/${id}`,
   eliminarCliente: (id) =>`/api/Empleadoes/EmpleadosEliminar/${id}`,
   reporteClientes: "/api/Reportes/RptClienteIndex?base64=false",
-  asistencia:"/api/Asistenciums/AsistenciaCrear"
+  asistencia:"/api/Asistenciums/AsistenciaCrear",
+  clientesAsistencia:"/api/Asistenciums/AsistenciaDelDia",
+  clienteSalida:(id) =>`/api/Asistenciums/AsistenciaActualizar/${id}`,
+  asignarRutina: "/api/Registro_Diario/RegistroCrear",
+  dashEntrenador: "/api/DashBoard/GruposporRutinas"
 
 
 };

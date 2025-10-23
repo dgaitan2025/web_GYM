@@ -13,7 +13,7 @@ export default function SiteDinamic() {
 
   const routes = [
     { path: "/sitedinamic/VistaDashAdmin", label: "Dashboard", roles: [1,2,3,4] },
-    { path: "/sitedinamic/EnConstruccion", label: "Membresia", roles: [4] },
+    { path: "/sitedinamic/VistaPerfil", label: "Perfil", roles: [4] },
     { path: "/sitedinamic/EnConstruccion", label: "Rutinas", roles: [4] },
     { path: "/sitedinamic/vistaAsistencia", label: "Asistencia", roles: [2] },
     { path: "/sitedinamic/EnConstruccion", label: "Registro pago", roles: [40] },

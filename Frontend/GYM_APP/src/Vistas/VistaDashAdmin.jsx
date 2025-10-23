@@ -6,7 +6,8 @@ import "./VistaDashAdmin.css";
 
 const opciones = [
     { value: "GraficoPie", label: "Clientes", roles: [1] },
-    { value: "Membresias", label: "Membresias", roles: [4] },
+    { value: "GrupoMuscular", label: "Grupo Muscular", roles: [1,4] },
+    { value: "RutinasMusculos", label: "Grupo Rutinas", roles: [3] },
 
 ];
 
