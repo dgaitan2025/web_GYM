@@ -43,7 +43,9 @@ export const ENDPOINTS = {
   clientesAsistencia:"/api/Asistenciums/AsistenciaDelDia",
   clienteSalida:(id) =>`/api/Asistenciums/AsistenciaActualizar/${id}`,
   asignarRutina: "/api/Registro_Diario/RegistroCrear",
-  dashEntrenador: "/api/DashBoard/GruposporRutinas"
+  dashEntrenador: "/api/DashBoard/GruposporRutinas",
+  rutinaClienteAsig:(id) => `/api/Registro_Diario/RegistroListarPorUsuario/${id}`,
+  rutinaFinalizar:(id) =>`/api/Registro_Diario/RegistroFinalizar/${id}`
 
 
 };

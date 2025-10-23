@@ -5,9 +5,9 @@ import {decryptString} from "../Funciones/Encriptar"
 import "./VistaDashAdmin.css";
 
 const opciones = [
-    { value: "GraficoPie", label: "Clientes", roles: [1] },
+    { value: "GraficoPie", label: "Clientes", roles: [1,2] },
     { value: "GrupoMuscular", label: "Grupo Muscular", roles: [1,4] },
-    { value: "RutinasMusculos", label: "Grupo Rutinas", roles: [3] },
+    { value: "RutinasMusculos", label: "Grupo Rutinas", roles: [1,3] },
 
 ];
 

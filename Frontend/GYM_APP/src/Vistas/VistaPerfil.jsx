@@ -3,7 +3,7 @@ import axios from "axios";
 import "./VistaPerfil.css";
 import { UrlWithApi, ENDPOINTS } from "../Service/apiConfig";
 import { Procesando } from "../Componente/Espera";
-import {decryptString} from "../Funciones/Encriptar"
+import {decryptString} from "../Funciones/Encriptar" 
 
 const { showLoading, closeLoading } = Procesando();
 

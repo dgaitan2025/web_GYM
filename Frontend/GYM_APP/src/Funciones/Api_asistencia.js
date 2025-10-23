@@ -103,3 +103,28 @@ export const crearRegistroDiario = async (registro) => {
     };
   }
 };
+
+export const finalizarRutina = async (idRegistro) => {
+  showLoading("Finalizando rutina...", "Por favor, espere");
+
+  try {
+    // 🔹 Llamada al endpoint del backend
+    const response = await axios.put(
+      UrlWithApi(ENDPOINTS.rutinaFinalizar(idRegistro))
+    );
+
+    const data = response.data;
+
+    if (data.success === 1 || data.success === true) {
+      closeLoading(true, data.message || "Rutina finalizada correctamente");
+      return { success: true, message: data.message };
+    } else {
+      closeLoading(false, data.message || "No se pudo finalizar la rutina");
+      return { success: false, message: data.message };
+    }
+  } catch (error) {
+    console.error("❌ Error al finalizar rutina:", error);
+    closeLoading(false, "Error al conectar con el servidor");
+    return { success: false, message: "Error al conectar con el servidor" };
+  }
+};
