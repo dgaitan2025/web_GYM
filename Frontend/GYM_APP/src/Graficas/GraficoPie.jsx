@@ -24,6 +24,11 @@ const GraficoPie = () => {
               label: "Membresías Vigentes",
               value: raw.clientes_con_Membresia_Vigente,
             },
+            {
+              id: "Membresías vencidas",
+              label: "Membresías vencidas",
+              value: raw.clientes_Activos - raw.clientes_con_Membresia_Vigente,
+            },
           ];
 
           setData(datosTransformados);
