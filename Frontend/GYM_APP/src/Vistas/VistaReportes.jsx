@@ -14,7 +14,7 @@ const VistaReportes = () => {
   const reportesDisponibles = [
     { id: 1, nombre: "Clientes activos", roles: [1, 2] },
     { id: 2, nombre: "Membresías vencidas", roles: [1] },
-    { id: 3, nombre: "Rutinas por cliente", roles: [1 ] },
+    { id: 3, nombre: "Rutinas por cliente", roles: [1, 2 ] },
     { id: 4, nombre: "Ingresos mensuales", roles: [1] },
   ];
 
