@@ -4,13 +4,13 @@ import { Procesando } from "../Componente/Espera.jsx";
 
 const { showLoading, closeLoading } = Procesando();
 
-export const descargarReporteClientes = async () => {
+export const descargarReporteClientes = async (nombreArchivo, endpoint) => {
   showLoading("Generando reporte de clientes...", "Espere un momento");
 
   try {
     // 🔹 Llamada al endpoint que devuelve archivo PDF
     const response = await axios.get(
-      UrlWithApi(ENDPOINTS.reporteClientes), // 🔹 base64=false => retorna archivo binario
+      UrlWithApi(endpoint), // 🔹 base64=false => retorna archivo binario
       { responseType: "blob" } // ⚠️ necesario para recibir archivo
     );
 
@@ -18,7 +18,7 @@ export const descargarReporteClientes = async () => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "reporte_clientes.pdf");
+    link.setAttribute("download", `${nombreArchivo.replace(/\s+/g, "_")}.pdf`);
     document.body.appendChild(link);
     link.click();
 

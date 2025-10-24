@@ -3,20 +3,23 @@ import "./VistaReportes.css";
 import { Procesando } from "../Componente/Espera.jsx";
 import { decryptString } from "../Funciones/Encriptar";
 import { descargarReporteClientes } from "../Funciones/Api_reportes.js";
+import { ENDPOINTS } from "../Service/apiConfig.js";
 
 const { showLoading, closeLoading } = Procesando();
-// Darwin :D         .l.
+
 const VistaReportes = () => {
   const [search, setSearch] = useState("");
   const role = Number(decryptString(localStorage.getItem("tipoUser")));
 
   // 🔹 Reportes con roles permitidos
   const reportesDisponibles = [
-    { id: 1, nombre: "Clientes activos", roles: [1, 2] },
-    { id: 2, nombre: "Membresías vencidas", roles: [1] },
-    { id: 3, nombre: "Rutinas por cliente", roles: [1, 2 ] },
-    { id: 4, nombre: "Ingresos mensuales", roles: [1] },
-  ];
+  { id: 1, nombre: "Clientes activos", roles: [1, 2], endpoint: ENDPOINTS.reporteClientes },
+  { id: 2, nombre: "Asistencia Por Cliente", roles: [1], endpoint: ENDPOINTS.reporteAsistenciaPorCliente },
+  { id: 3, nombre: "Porcentaje de Asistencia por Cliente", roles: [1, 2], endpoint: ENDPOINTS.reportePorcentajeAsistencia },
+  { id: 4, nombre: "Rutinas por asistencia", roles: [1], endpoint: ENDPOINTS.reporteRutinasAsistencia },
+  { id: 5, nombre: "Ingresos por Cliente", roles: [1], endpoint: ENDPOINTS.reporteIngresosPorCliente },
+  { id: 6, nombre: "Ingresos por Fecha", roles: [1], endpoint: ENDPOINTS.reporteIngresosPorFecha },
+];
 
   // 🔹 Filtrar según el rol del usuario
   const reportes = useMemo(() => {
@@ -25,13 +28,11 @@ const VistaReportes = () => {
   }, [role]);
 
   // 🔹 Función para descargar reporte
-  const handleDescargar = async (id) => {
+  const handleDescargar = async (reporte) => {
     showLoading("Generando reporte...", "Espere un momento");
 
     try {
-      if (id === 1) {
-        await descargarReporteClientes();
-      }
+        await descargarReporteClientes(reporte.nombre, reporte.endpoint);
       closeLoading(true, "Reporte generado correctamente");
     } catch (error) {
       console.error(error);
@@ -64,7 +65,7 @@ const VistaReportes = () => {
                   <td>
                     <button
                       className="download"
-                      onClick={() => handleDescargar(rep.id)}
+                      onClick={() => handleDescargar(rep)}
                     >
                       📄 Descargar PDF
                     </button>
