@@ -8,6 +8,7 @@ const opciones = [
     { value: "GraficoPie", label: "Clientes", roles: [1,2] },
     { value: "GrupoMuscular", label: "Grupo Muscular", roles: [1,4] },
     { value: "RutinasMusculos", label: "Grupo Rutinas", roles: [1,3] },
+    { value: "AsistenciaUsuario", label: "Marcaje de usuarios", roles: [1,2] },
 
 ];
 

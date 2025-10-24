@@ -3,44 +3,35 @@ import { ResponsiveBar } from "@nivo/bar";
 import {decryptString} from "../Funciones/Encriptar"
 import { UrlWithApi, ENDPOINTS } from "../Service/apiConfig";
 
-const GraficoBar = () => {
+const GraficoAsis = () => {
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]); 
 
 useEffect(() => {
   const obtenerDatos = async () => {
     try {
-      const encryptedId = localStorage.getItem("IdUser");
-        if (!encryptedId) {
-          console.warn("⚠️ No se encontró IdUser en localStorage");
-          return;
-        }
-      
-        const userID = Number(decryptString(encryptedId));
-      
-        // 🔹 Validar que sea un número válido
-        if (isNaN(userID) || userID <= 0) {
-          console.warn("⚠️ ID de usuario inválido:", userID);
-          return;
-        }
-
-      const response = await fetch(UrlWithApi(ENDPOINTS.dashCliente(userID)));
+      const response = await fetch(UrlWithApi(ENDPOINTS.dashAsistencia));
       const data = await response.json();
 
-      // 🔹 Convertir el formato del endpoint al formato requerido por la gráfica
-      const objetoGrafica = { country: "Grupos Musculares" };
+      if (!data || data.length === 0) {
+        console.warn("No hay datos disponibles para el dashboard");
+        return;
+      }
 
-      data.forEach((item) => {
-        objetoGrafica[item.grupoMuscular] = item.veces_Trabajado;
-      });
+      const { entradas, entradasSinSalida } = data[0]; // tomamos el primer objeto
 
-      // 🔹 Detectar dinámicamente las claves (todas excepto "country")
+      // 🔹 Convertir al formato compatible con tu gráfica
+      const objetoGrafica = {
+        country: "Asistencia",
+        Entradas: entradas,
+        "Entradas sin salida": entradasSinSalida
+      };
+
+      // 🔹 Claves dinámicas (para las barras)
       const claves = Object.keys(objetoGrafica).filter((k) => k !== "country");
 
-      // 🔹 Actualizar estados
       setData([objetoGrafica]);
       setKeys(claves);
-
     } catch (error) {
       console.error("Error al obtener datos del dashboard:", error);
     }
@@ -126,4 +117,4 @@ useEffect(() => {
   );
 };
 
-export default GraficoBar;
+export default GraficoAsis;
