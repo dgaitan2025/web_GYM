@@ -5,7 +5,7 @@ import { decryptString } from "../Funciones/Encriptar";
 import { descargarReporteClientes } from "../Funciones/Api_reportes.js";
 
 const { showLoading, closeLoading } = Procesando();
-
+// Darwin :D         .l.
 const VistaReportes = () => {
   const [search, setSearch] = useState("");
   const role = Number(decryptString(localStorage.getItem("tipoUser")));
