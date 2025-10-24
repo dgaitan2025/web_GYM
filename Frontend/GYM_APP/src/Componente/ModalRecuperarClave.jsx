@@ -5,6 +5,7 @@ import { recuperarClave } from "../Funciones/RecuperarCredenciales";
 
 export default function ModalRecuperarClave({ visible, onClose }) {
   const [email, setEmail] = useState("");
+  const [usuario, setUsuario] = useState("");
 
   if (!visible) return null;
 
@@ -12,10 +13,15 @@ export default function ModalRecuperarClave({ visible, onClose }) {
     e.preventDefault();
 
     const { showLoading, closeLoading } = Procesando();
-    showLoading("Recuperando", "Procesando");
+    showLoading("Recuperando", "Procesando...");
 
     try {
-      const credenciales = { correo: email };
+      // 🔹 JSON completo que la API espera
+      const credenciales = {
+        correo: email,
+        usuario: usuario
+      };
+
       const respuesta = await recuperarClave(credenciales);
 
       if (respuesta.success === 1 || respuesta.success === true) {
@@ -49,10 +55,21 @@ export default function ModalRecuperarClave({ visible, onClose }) {
             ></button>
           </div>
 
-          
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
-              <p>Ingresa tu correo para recuperar la clave.</p>
+              <p>Ingresa tu usuario y correo para recuperar la clave.</p>
+
+              {/* 🔹 Usuario */}
+              <input
+                type="text"
+                className="form-control mb-3"
+                placeholder="Usuario"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
+                required
+              />
+
+              {/* 🔹 Correo */}
               <input
                 type="email"
                 className="form-control"

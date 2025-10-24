@@ -1,6 +1,6 @@
 // DOminio
 export const URL = "https://www.apitect.somee.com"//"http://localhost:5230"; //DG
-const API_URL = "https://localhost:7288"//"https://localhost:7288" //"https://Compiladores2025.somee.com"; //RD
+const API_URL = "https://Compiladores2025.somee.com"//"https://localhost:7288" //"https://Compiladores2025.somee.com"; //RD
 
 
 // Endpoints organizados
