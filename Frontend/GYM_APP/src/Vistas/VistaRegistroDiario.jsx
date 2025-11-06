@@ -29,11 +29,14 @@ const VistaRegistroDiario = () => {
       }
 
       showLoading("Cargando registros...", "Por favor, espere");
-
+      console.log("Usuario ID ",userID )
       try {
         const response = await axios.get(
           UrlWithApi(ENDPOINTS.rutinaClienteAsig(userID))
         );
+     
+
+        console.log("Data de usuarios rutinas",response )
         setRegistros(response.data);
         closeLoading(true, "Registros cargados correctamente");
       } catch (error) {
